@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../config/themes/button_styles.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import '../../widgets/outlined_text_form_field.dart';
@@ -17,6 +18,7 @@ class CreateAccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -32,7 +34,7 @@ class CreateAccountPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 18, right: 30),
+        padding: EdgeInsets.only(left: 18, right: 30, bottom: MediaQuery.viewInsetsOf(context).bottom),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -73,8 +75,16 @@ class CreateAccountPage extends StatelessWidget {
             OutlinedTextFormField(controller: _passwordController, labelText: 'password'),
             const SizedBox(height: 15),
             OutlinedTextFormField(controller: _confirmPasswordController, labelText: 'confirm password'),
-
           ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 18, right: 18),
+        child: ElevatedButton(
+          onPressed: () {},
+          style: ButtonStyles.primaryElevatedButtonStyle(context),
+          child: const Text('Create Account'),
         ),
       ),
 

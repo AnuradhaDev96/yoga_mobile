@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../config/themes/button_styles.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import 'create_account_page.dart';
@@ -91,19 +92,9 @@ class LauncherPage extends StatelessWidget {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
-                backgroundColor: AppColors.indigo1,
-                foregroundColor: Colors.white,
-                textStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-                surfaceTintColor: Colors.transparent,
-              ),
+              style: ButtonStyles.primaryElevatedButtonStyle(context),
               child: const Text('Log in'),
-            )
+            ),
           ],
         ),
       ),
