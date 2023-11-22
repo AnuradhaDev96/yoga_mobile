@@ -8,8 +8,10 @@ class LauncherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('##height: ${MediaQuery.sizeOf(context).height}');
+    print('##width: ${MediaQuery.sizeOf(context).width}');
     return Scaffold(
-      backgroundColor: const Color(0xFFDAE2EB),
+      backgroundColor: AppColors.grey1,
       body: SafeArea(
         bottom: false,
         child: Stack(
@@ -23,36 +25,87 @@ class LauncherPage extends StatelessWidget {
                 fit: BoxFit.fitWidth,
               ),
             ),
-            const Positioned(
+            Positioned(
               top: 0,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 24, top: 32),
-                    child: Text(
-                      'keepyoga',
+              child: Container(
+                width: MediaQuery.sizeOf(context).width,
+                padding: const EdgeInsets.only(bottom: 40),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppColors.grey1,
+                      AppColors.grey1,
+                      AppColors.grey1.withOpacity(0.0),
+                    ]
+                  ),
+                ),
+                child: const Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 24, top: 32),
+                      child: Text(
+                        'keepyoga',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 24, color: Color(0xFFAFBCCB), letterSpacing: -1.3),
+                      ),
+                    ),
+                    Text(
+                      'Practice yoga\nwhenever you want.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24,
-                          color: Color(0xFFAFBCCB),
-                          letterSpacing: -1.3),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32,
+                        height: 1.2,
+                        color: AppColors.black1,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Practice yoga\nwhenever you want.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 32,
-                      height: 1.2,
-                      color: AppColors.black1,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
+                foregroundColor: AppColors.black1,
+                backgroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                surfaceTintColor: Colors.transparent,
+              ),
+              child: const Text('Get started'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
+                backgroundColor: AppColors.indigo1,
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                surfaceTintColor: Colors.transparent,
+              ),
+              child: const Text('Log in'),
+            )
           ],
         ),
       ),
