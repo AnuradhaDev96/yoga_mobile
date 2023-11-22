@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../utils/constants/app_colors.dart';
 
 abstract class ButtonStyles {
+
+  /// Elevated Button style for primary button
   static ButtonStyle primaryElevatedButtonStyle(BuildContext context) => ElevatedButton.styleFrom(
         elevation: 0,
         fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
