@@ -6,6 +6,7 @@ abstract class ButtonStyles {
   static ButtonStyle primaryElevatedButtonStyle(BuildContext context) => ElevatedButton.styleFrom(
         elevation: 0,
         fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(48)),
         backgroundColor: AppColors.indigo1,
         foregroundColor: Colors.white,
         textStyle: const TextStyle(

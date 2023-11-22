@@ -4,6 +4,7 @@ import '../../../config/themes/button_styles.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import 'create_account_page.dart';
+import 'login_page.dart';
 
 class LauncherPage extends StatelessWidget {
   const LauncherPage({super.key});
@@ -91,7 +92,10 @@ class LauncherPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              ),
               style: ButtonStyles.primaryElevatedButtonStyle(context),
               child: const Text('Log in'),
             ),
