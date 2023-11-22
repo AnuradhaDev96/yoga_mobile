@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
+import 'create_account_page.dart';
 
 class LauncherPage extends StatelessWidget {
   const LauncherPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print('##height: ${MediaQuery.sizeOf(context).height}');
-    print('##width: ${MediaQuery.sizeOf(context).width}');
     return Scaffold(
       backgroundColor: AppColors.grey1,
       body: SafeArea(
@@ -31,15 +30,11 @@ class LauncherPage extends StatelessWidget {
                 width: MediaQuery.sizeOf(context).width,
                 padding: const EdgeInsets.only(bottom: 40),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.grey1,
-                      AppColors.grey1,
-                      AppColors.grey1.withOpacity(0.0),
-                    ]
-                  ),
+                  gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
+                    AppColors.grey1,
+                    AppColors.grey1,
+                    AppColors.grey1.withOpacity(0.0),
+                  ]),
                 ),
                 child: const Column(
                   children: [
@@ -76,7 +71,10 @@ class LauncherPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateAccountPage()),
+              ),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
