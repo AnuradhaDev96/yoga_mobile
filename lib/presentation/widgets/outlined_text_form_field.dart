@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../config/themes/error_text_styles.dart';
 import '../../utils/constants/app_colors.dart';
@@ -10,12 +11,16 @@ class OutlinedTextFormField extends StatelessWidget {
     required this.labelText,
     this.autoValidateMode,
     this.validator,
+    this.keyboardType,
+    this.inputFormatters,
   });
 
   final TextEditingController controller;
   final String labelText;
   final AutovalidateMode? autoValidateMode;
   final FormFieldValidator<String?>? validator;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,8 @@ class OutlinedTextFormField extends StatelessWidget {
         controller: controller,
         autovalidateMode: autoValidateMode,
         validator: validator,
+        keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
         style: const TextStyle(
           color: AppColors.black1,
           fontSize: 16,

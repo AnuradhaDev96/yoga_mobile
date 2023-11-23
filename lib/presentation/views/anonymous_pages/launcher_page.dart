@@ -75,7 +75,7 @@ class LauncherPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CreateAccountPage()),
+                MaterialPageRoute(builder: (context) => const CreateAccountPage()),
               ),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
