@@ -5,6 +5,7 @@ abstract class Assets {
 
   // svg
   static const leftArrow = 'assets/svg/back_arrow_box.svg';
+  static const rightArrow = 'assets/svg/right_arrow.svg';
   static const errorFlushbarIcon = 'assets/svg/error_flushbar_icon.svg';
   static const successFlushbarIcon = 'assets/svg/success_flushbar_icon.svg';
   static const logoutIcon = 'assets/svg/logout_icon.svg';
