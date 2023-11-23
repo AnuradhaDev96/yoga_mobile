@@ -15,6 +15,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final response = await GetIt.instance<ApiClient>().postRequest(
       endpointSuffix: '/auth/login',
       requestData: data.toMap(),
+      shouldAuthorize: false,
     );
 
     if (response != null) {

@@ -15,9 +15,8 @@ class ApiClient extends ApiHelper {
   static const _defaultBaseUrl = EndpointHelper.baseUrl;
 
   final Map<String, String> _commonHeaders = {
-    'Accept': '*/*',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive',
+    'Accept': 'application/json;',
+    'Content-Type': 'application/json; charset=UTF-8',
   };
 
   Future<Map<String, String>> get _authorizationHeader async {

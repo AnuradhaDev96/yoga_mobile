@@ -156,7 +156,7 @@ class LoginPage extends StatelessWidget {
                         bloc: _loginCubit,
                         listener: (context, state) {
                           if (state is ErrorState) {
-                            MessageUtils.showSnackBarOverBarrier(context, state.errorMessage);
+                            // MessageUtils.showSnackBarOverBarrier(context, state.errorMessage, isErrorMessage: true);
                           }
                         },
                         child: BlocBuilder<LoginRequestCubit, DataPayloadState>(
