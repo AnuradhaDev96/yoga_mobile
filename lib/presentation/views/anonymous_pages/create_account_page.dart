@@ -228,6 +228,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 MessageUtils.showSnackBarOverBarrier(context, state.errorMessage, isErrorMessage: true);
               } else if (state is SuccessState) {
                 // Replace route to login page after creating account
+                _resetFields();
                 MessageUtils.showSnackBarOverBarrier(context, 'User registered successfully');
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
               }
@@ -260,5 +261,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         ),
       ),
     );
+  }
+
+  void _resetFields() {
+    setState(() {
+      _emailController.clear();
+      _usernameController.clear();
+      _ageController.clear();
+      _passwordController.clear();
+      _confirmPasswordController.clear();
+      _selectedGender = GenderEnum.male;
+    });
   }
 }
