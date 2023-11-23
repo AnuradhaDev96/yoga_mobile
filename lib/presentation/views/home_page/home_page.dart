@@ -150,7 +150,6 @@ class HomePage extends StatelessWidget {
             child: FutureBuilder(
               future: GetIt.instance<YogaActivitiesRepository>().getSessions(),
               builder: (context, snapshot) {
-
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Padding(
                     padding: EdgeInsets.only(top: 30),
@@ -219,6 +218,81 @@ class HomePage extends StatelessWidget {
                                       );
                                     },
                                   ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      sessionData.title ?? 'N/A',
+                                      style: const TextStyle(
+                                        color: Color(0xFF161719),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '${sessionData.lessons?.length ?? '0'} lesson${sessionData.lessons?.length == 1 ? '' : 's'}',
+                                      style: TextStyle(
+                                        color: const Color(0xFF2B2B2B).withOpacity(0.70),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'By ${sessionData.instructor ?? 'N/A'}',
+                                          style: const TextStyle(
+                                            color: Color(0xFFAAAAAA),
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 3,
+                                          height: 3,
+                                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xFFAAAAAA),
+                                          ),
+                                        ),
+                                        Text(
+                                          sessionData.category ?? 'N/A',
+                                          style: const TextStyle(
+                                            color: Color(0xFFAAAAAA),
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 3,
+                                          height: 3,
+                                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xFFAAAAAA),
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.star_rounded,
+                                          size: 16,
+                                          color: Color(0xFFFFC960),
+                                        ),
+                                        const SizedBox(width: 6.08),
+                                        Text(
+                                          '4.5',
+                                          style: TextStyle(
+                                            color: const Color(0xFF2B2B2B).withOpacity(0.7),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
                               )
                             ],
