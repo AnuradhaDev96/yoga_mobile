@@ -26,39 +26,39 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Container(
-                height: MediaQuery.sizeOf(context).height * 0.5,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage(Assets.loginScreenImage), fit: BoxFit.fitWidth),
-                ),
-              ),
-              Opacity(
-                opacity: 0.69,
-                child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Container(
                   height: MediaQuery.sizeOf(context).height * 0.5,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      stops: const [0.08, 0.25, 1],
-                      colors: [
-                        Colors.white,
-                        Colors.white.withOpacity(0.8783),
-                        const Color(0xFF170A5A).withOpacity(0),
-                      ],
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(image: AssetImage(Assets.loginScreenImage), fit: BoxFit.fitWidth),
+                  ),
+                ),
+                Opacity(
+                  opacity: 0.69,
+                  child: Container(
+                    height: MediaQuery.sizeOf(context).height * 0.5,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        stops: const [0.08, 0.25, 1],
+                        colors: [
+                          Colors.white,
+                          Colors.white.withOpacity(0.8783),
+                          const Color(0xFF170A5A).withOpacity(0),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
+              ],
+            ),
+            Padding(
               padding: EdgeInsets.only(top: 33, left: 17, right: 17, bottom: MediaQuery.viewInsetsOf(context).bottom),
               child: Form(
                 key: _formKey,
@@ -186,8 +186,8 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
