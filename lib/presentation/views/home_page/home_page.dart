@@ -28,6 +28,7 @@ class HomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 10),
             child: InkWell(
+              customBorder: const CircleBorder(),
               onTap: () {
                 AuthenticationBloc().add(LoggedOut());
               },
@@ -79,7 +80,7 @@ class HomePage extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Container(
-              margin: const EdgeInsets.only(left: 20, right: 23),
+              margin: const EdgeInsets.only(left: 20, right: 23, top: 24, bottom: 16),
               padding: const EdgeInsets.only(left: 24, top: 19, bottom: 24, right: 22),
               decoration: BoxDecoration(
                 color: AppColors.indigo1.withOpacity(0.71),
@@ -123,7 +124,25 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-          )
+          ),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(left: 22),
+              child: Text(
+                'Top Sessions',
+                style: TextStyle(
+                  color: AppColors.black1,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          // SliverToBoxAdapter(
+          //   child: FutureBuilder(
+          //     future: null,
+          //   ),
+          // )
         ],
       ),
     );
