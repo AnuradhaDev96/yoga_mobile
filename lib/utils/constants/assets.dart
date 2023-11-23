@@ -9,8 +9,10 @@ abstract class Assets {
   static const errorFlushbarIcon = 'assets/svg/error_flushbar_icon.svg';
   static const successFlushbarIcon = 'assets/svg/success_flushbar_icon.svg';
   static const logoutIcon = 'assets/svg/logout_icon.svg';
+  static const lessonCardPlayIcon = 'assets/svg/lesson_card_play_icon.svg';
 
   // lottie
   static const loadingDots = 'assets/lottie/loading_dots.json';
   static const userAvatarPng = 'assets/png/user_avatar.png';
+  static const lessonAvatar = 'assets/png/lesson_avatar.png';
 }

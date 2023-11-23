@@ -11,6 +11,7 @@ import '../../../utils/constants/assets.dart';
 import '../../blocs/authentication_bloc.dart';
 import '../../states/authentication_state.dart';
 import '../../widgets/circular_loader.dart';
+import '../lessons_list_page/lessons_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -187,111 +188,116 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           var sessionData = topSessions[index];
 
-                          return Container(
-                            margin: const EdgeInsets.only(left: 20, right: 20),
-                            padding: const EdgeInsets.fromLTRB(15, 15, 15, 25),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(0, 20),
-                                  color: const Color(0xFF24201E).withOpacity(0.06),
-                                  spreadRadius: 0,
-                                  blurRadius: 15,
-                                )
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 75,
-                                  height: 75,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.grey3,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: CachedNetworkImage(
-                                      imageUrl: sessionData.imageUrl ?? '',
-                                      fit: BoxFit.cover,
-                                      placeholder: (_, __) {
-                                        return const CircularLoader(
-                                          strokeWidth: 1.0,
-                                          circleSize: 16.0,
-                                        );
-                                      },
-                                      errorWidget: (_, __, ___) {
-                                        return const Center(
-                                          child: Icon(Icons.image, size: 25),
-                                        );
-                                      },
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => LessonsListPage()));
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 20, right: 20),
+                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 25),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(0, 20),
+                                    color: const Color(0xFF24201E).withOpacity(0.06),
+                                    spreadRadius: 0,
+                                    blurRadius: 15,
+                                  )
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 75,
+                                    height: 75,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.grey3,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        imageUrl: sessionData.imageUrl ?? '',
+                                        fit: BoxFit.cover,
+                                        placeholder: (_, __) {
+                                          return const CircularLoader(
+                                            strokeWidth: 1.0,
+                                            circleSize: 16.0,
+                                          );
+                                        },
+                                        errorWidget: (_, __, ___) {
+                                          return const Center(
+                                            child: Icon(Icons.image, size: 25),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        sessionData.title ?? 'N/A',
-                                        style: const TextStyle(
-                                          color: Color(0xFF161719),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          sessionData.title ?? 'N/A',
+                                          style: const TextStyle(
+                                            color: Color(0xFF161719),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        '${sessionData.lessons?.length ?? '0'} lesson${sessionData.lessons?.length == 1 ? '' : 's'}',
-                                        style: TextStyle(
-                                          color: const Color(0xFF2B2B2B).withOpacity(0.70),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          '${sessionData.lessons?.length ?? '0'} lesson${sessionData.lessons?.length == 1 ? '' : 's'}',
+                                          style: TextStyle(
+                                            color: const Color(0xFF2B2B2B).withOpacity(0.70),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'By ${sessionData.instructor ?? 'N/A'}',
-                                            style: const TextStyle(
-                                              color: Color(0xFFAAAAAA),
-                                              fontSize: 10,
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'By ${sessionData.instructor ?? 'N/A'}',
+                                              style: const TextStyle(
+                                                color: Color(0xFFAAAAAA),
+                                                fontSize: 10,
+                                              ),
                                             ),
-                                          ),
-                                          _roundedSeparator,
-                                          Text(
-                                            sessionData.category ?? 'N/A',
-                                            style: const TextStyle(
-                                              color: Color(0xFFAAAAAA),
-                                              fontSize: 10,
+                                            _roundedSeparator,
+                                            Text(
+                                              sessionData.category ?? 'N/A',
+                                              style: const TextStyle(
+                                                color: Color(0xFFAAAAAA),
+                                                fontSize: 10,
+                                              ),
                                             ),
-                                          ),
-                                          _roundedSeparator,
-                                          const Icon(
-                                            Icons.star_rounded,
-                                            size: 16,
-                                            color: Color(0xFFFFC960),
-                                          ),
-                                          const SizedBox(width: 6.08),
-                                          Text(
-                                            '4.5',
-                                            style: TextStyle(
-                                              color: const Color(0xFF2B2B2B).withOpacity(0.7),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 10,
+                                            _roundedSeparator,
+                                            const Icon(
+                                              Icons.star_rounded,
+                                              size: 16,
+                                              color: Color(0xFFFFC960),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
+                                            const SizedBox(width: 6.08),
+                                            Text(
+                                              '4.5',
+                                              style: TextStyle(
+                                                color: const Color(0xFF2B2B2B).withOpacity(0.7),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         },
