@@ -26,8 +26,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _emailController.text = 'test@email.com';
-    _passwordController.text = '123456';
+    // _emailController.text = 'test@email.com';
+    // _passwordController.text = '123';
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -174,7 +174,7 @@ class LoginPage extends StatelessWidget {
                               if (state is RequestingState) {
                                 return SizedBox(
                                   // height: 48,
-                                  child: Lottie.asset(Assets.loadingDots),
+                                  child: Lottie.asset(Assets.loadingDots, height: 70),
                                 );
                               }
 
