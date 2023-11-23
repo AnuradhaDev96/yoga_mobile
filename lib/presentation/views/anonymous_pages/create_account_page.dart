@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../config/themes/button_styles.dart';
 import '../../../domain/enums/gender_enum.dart';
+import '../../../utils/extensions/validate_string_input.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import '../../widgets/outlined_text_form_field.dart';
@@ -77,9 +78,32 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 controller: _emailController,
                 labelText: 'Email',
                 keyboardType: TextInputType.emailAddress,
+                autoValidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter email address';
+                  }
+
+                  if (!value.isValidEmail) {
+                    return 'Enter valid email address';
+                  }
+
+                  return null;
+                },
               ),
               const SizedBox(height: 15),
-              OutlinedTextFormField(controller: _usernameController, labelText: 'user name'),
+              OutlinedTextFormField(
+                controller: _usernameController,
+                labelText: 'user name',
+                autoValidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter username';
+                  }
+
+                  return null;
+                },
+              ),
               const SizedBox(height: 15),
               Row(
                 children: [
@@ -147,13 +171,38 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 controller: _passwordController,
                 labelText: 'password',
                 keyboardType: TextInputType.visiblePassword,
+                autoValidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter a password';
+                  }
+
+                  if (value.length < 6) {
+                    return 'Password should contain at least 6 characters';
+                  }
+
+                  return null;
+                },
               ),
               const SizedBox(height: 15),
               OutlinedTextFormField(
                 controller: _confirmPasswordController,
                 labelText: 'confirm password',
                 keyboardType: TextInputType.visiblePassword,
+                autoValidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter confirm password';
+                  }
+
+                  if (value != _passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+
+                  return null;
+                },
               ),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.15),
             ],
           ),
         ),
@@ -162,7 +211,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(left: 18, right: 18),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {}
+          },
           style: ButtonStyles.primaryElevatedButtonStyle(context),
           child: const Text('Create Account'),
         ),
