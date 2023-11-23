@@ -39,5 +39,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
     //store log in status in the middle logic
     await GetIt.instance<LocalStorageRepository>().saveBoolValue(PreferenceKeys.isLoggedInKey, false);
+    await GetIt.instance<LocalStorageRepository>().removeValue(PreferenceKeys.userTokenKey);
   }
 }
