@@ -3,9 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../../domain/models/auth/login_model.dart';
 import '../../../domain/repositories/auth_repository.dart';
-import '../../states/authentication_state.dart';
 import '../../states/data_payload_state.dart';
-import '../authentication_bloc.dart';
 
 class LoginRequestCubit extends Cubit<DataPayloadState> {
   LoginRequestCubit() : super(InitialState());
@@ -17,7 +15,6 @@ class LoginRequestCubit extends Cubit<DataPayloadState> {
 
     if (result.statusCode == 200) {
       emit(SuccessState());
-      AuthenticationBloc().add(LoggedIn());
     } else {
       emit(ErrorState(result.messageForClient));
     }

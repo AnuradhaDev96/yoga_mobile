@@ -9,6 +9,8 @@ import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import '../../../utils/resources/message_utils.dart';
 import '../../blocs/anonymous_pages/login_request_cubit.dart';
+import '../../blocs/authentication_bloc.dart';
+import '../../states/authentication_state.dart';
 import '../../states/data_payload_state.dart';
 import '../../widgets/outlined_text_form_field.dart';
 
@@ -24,6 +26,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _emailController.text = 'test@email.com';
+    _passwordController.text = '123456';
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -156,7 +160,12 @@ class LoginPage extends StatelessWidget {
                         bloc: _loginCubit,
                         listener: (context, state) {
                           if (state is ErrorState) {
-                            // MessageUtils.showSnackBarOverBarrier(context, state.errorMessage, isErrorMessage: true);
+                            // show error message on login error
+                            MessageUtils.showSnackBarOverBarrier(context, state.errorMessage, isErrorMessage: true);
+                          } else if (state is SuccessState) {
+                            // update app status to logged in when successful login
+                            AuthenticationBloc().add(LoggedIn());
+                            Navigator.of(context).popUntil((route) => route.isFirst);
                           }
                         },
                         child: BlocBuilder<LoginRequestCubit, DataPayloadState>(
