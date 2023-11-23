@@ -26,8 +26,8 @@ class HomePage extends StatelessWidget {
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Good morning',
+        title: Text(
+          _timeBasedGreeting,
           style: TextStyle(color: AppColors.black1, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -253,14 +253,7 @@ class HomePage extends StatelessWidget {
                                             fontSize: 10,
                                           ),
                                         ),
-                                        Container(
-                                          width: 3,
-                                          height: 3,
-                                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xFFAAAAAA),
-                                          ),
-                                        ),
+                                        _roundedSeparator,
                                         Text(
                                           sessionData.category ?? 'N/A',
                                           style: const TextStyle(
@@ -268,14 +261,7 @@ class HomePage extends StatelessWidget {
                                             fontSize: 10,
                                           ),
                                         ),
-                                        Container(
-                                          width: 3,
-                                          height: 3,
-                                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xFFAAAAAA),
-                                          ),
-                                        ),
+                                        _roundedSeparator,
                                         const Icon(
                                           Icons.star_rounded,
                                           size: 16,
@@ -312,5 +298,28 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget get _roundedSeparator => Container(
+        width: 3,
+        height: 3,
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        decoration: const BoxDecoration(
+          color: Color(0xFFAAAAAA),
+        ),
+      );
+
+  String get _timeBasedGreeting {
+    DateTime now = DateTime.now();
+
+    int currentHour = now.hour;
+
+    if (currentHour < 12 && currentHour > 4) {
+      return 'Good Morning';
+    } else if (currentHour < 17 && currentHour > 11) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
   }
 }
