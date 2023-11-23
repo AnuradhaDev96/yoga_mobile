@@ -42,7 +42,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         leading: InkWell(
           customBorder: const CircleBorder(),
           // radius: 5,
