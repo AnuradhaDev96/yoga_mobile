@@ -58,7 +58,7 @@ class SessionHandler extends StatelessWidget {
           if (state is AuthenticationInitial) {
             return const Material(color: Colors.white);
           } else if (state is AuthenticationAuthenticated) {
-            return const HomePage();
+            return HomePage();
           } else {
             return const LauncherPage();
           }

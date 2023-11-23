@@ -55,6 +55,32 @@ class ApiClient extends ApiHelper {
     }
     return null;
   }
+
+  // TODO: implement expire token and logout logic
+  Future<http.Response?> getRequest({
+    String baseUrl = _defaultBaseUrl,
+    required String endpointSuffix,
+    bool shouldAuthorize = true,
+  }) async {
+    Uri endpoint = Uri.parse('$baseUrl$endpointSuffix');
+
+    var headers = _commonHeaders;
+    if (shouldAuthorize) {
+      headers.addAll(await _authorizationHeader);
+    }
+
+    try {
+      var response = await http.get(endpoint, headers: headers);
+      logEndpoint(endpoint, response.statusCode);
+      return response;
+    } on SocketException catch (exception) {
+      logException(endpoint, exception);
+      handleHostLookupFailure();
+    } catch (error) {
+      logException(endpoint, error);
+    }
+    return null;
+  }
 }
 
 abstract class ApiHelper {

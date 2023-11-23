@@ -1,14 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../domain/enums/session_category_enum.dart';
+import '../../../domain/models/session/session_model.dart';
+import '../../../domain/repositories/yoga_activities_repository.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import '../../blocs/authentication_bloc.dart';
 import '../../states/authentication_state.dart';
+import '../../widgets/circular_loader.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +45,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: CustomScrollView(
+        controller: _controller,
         slivers: [
           SliverToBoxAdapter(
             child: SizedBox(
@@ -138,11 +146,95 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: FutureBuilder(
-          //     future: null,
-          //   ),
-          // )
+          SliverToBoxAdapter(
+            child: FutureBuilder(
+              future: GetIt.instance<YogaActivitiesRepository>().getSessions(),
+              builder: (context, snapshot) {
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 30),
+                    child: CircularLoader(),
+                  );
+                }
+
+                if (snapshot.hasData) {
+                  var listData = snapshot.data;
+
+                  if (listData == null || listData.isEmpty) {
+                    return const Center(child: Text('No data available'));
+                  } else {
+                    List<SessionModel> topSessions = [];
+                    if (listData.length >= 3) {
+                      topSessions.addAll(listData.sublist(0, 3));
+                    } else {
+                      topSessions.addAll(listData);
+                    }
+
+                    return ListView.separated(
+                      controller: _controller,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(bottom: 30, top: 17),
+                      itemBuilder: (context, index) {
+                        var sessionData = topSessions[index];
+
+                        return Container(
+                          margin: const EdgeInsets.only(left: 20, right: 20),
+                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 25),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 20),
+                                color: const Color(0xFF24201E).withOpacity(0.06),
+                                spreadRadius: 0,
+                                blurRadius: 15,
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 75,
+                                height: 75,
+                                decoration: BoxDecoration(
+                                  color: AppColors.grey3,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    imageUrl: sessionData.imageUrl ?? '',
+                                    fit: BoxFit.cover,
+                                    placeholder: (_, __) {
+                                      return const CircularLoader(
+                                        strokeWidth: 1.0,
+                                        circleSize: 16.0,
+                                      );
+                                    },
+                                    errorWidget: (_, __, ___) {
+                                      return const Center(
+                                        child: Icon(Icons.image, size: 25),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(height: 16),
+                      itemCount: topSessions.length,
+                    );
+                  }
+                } else {
+                  return const Center(child: Text('No data available'));
+                }
+              },
+            ),
+          )
         ],
       ),
     );
