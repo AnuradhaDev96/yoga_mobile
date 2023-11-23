@@ -31,11 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  another_flushbar: ^1.12.30
   cupertino_icons: ^1.0.2
   equatable: ^2.0.5
   flutter_bloc: ^8.1.3
   flutter_svg: ^2.0.9
   get_it: ^7.6.4
+  http: ^1.1.0
   shared_preferences: ^2.2.2
 
 dev_dependencies:
