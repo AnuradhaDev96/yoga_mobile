@@ -8,6 +8,9 @@ import '../../widgets/outlined_text_form_field.dart';
 
 class CreateAccountPage extends StatelessWidget {
   CreateAccountPage({super.key});
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _genderController = TextEditingController();
@@ -35,47 +38,50 @@ class CreateAccountPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(left: 18, right: 30, bottom: MediaQuery.viewInsetsOf(context).bottom),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 6, bottom: 8),
-              child: Text(
-                'Registration',
-                style: TextStyle(
-                  color: AppColors.black1,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 6, bottom: 8),
+                child: Text(
+                  'Registration',
+                  style: TextStyle(
+                    color: AppColors.black1,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                  ),
                 ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 6, bottom: 12),
-              child: Text(
-                'Create your account',
-                style: TextStyle(
-                  color: AppColors.black1,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16,
+              const Padding(
+                padding: EdgeInsets.only(left: 6, bottom: 12),
+                child: Text(
+                  'Create your account',
+                  style: TextStyle(
+                    color: AppColors.black1,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
-            OutlinedTextFormField(controller: _emailController, labelText: 'Email'),
-            const SizedBox(height: 15),
-            OutlinedTextFormField(controller: _usernameController, labelText: 'user name'),
-            const SizedBox(height: 15),
-            Row(
-              children: [
-                Flexible(child: OutlinedTextFormField(controller: _genderController, labelText: 'gender')),
-                const SizedBox(width: 19),
-                Flexible(child: OutlinedTextFormField(controller: _ageController, labelText: 'age')),
-              ],
-            ),
-            const SizedBox(height: 15),
-            OutlinedTextFormField(controller: _passwordController, labelText: 'password'),
-            const SizedBox(height: 15),
-            OutlinedTextFormField(controller: _confirmPasswordController, labelText: 'confirm password'),
-          ],
+              OutlinedTextFormField(controller: _emailController, labelText: 'Email'),
+              const SizedBox(height: 15),
+              OutlinedTextFormField(controller: _usernameController, labelText: 'user name'),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Flexible(child: OutlinedTextFormField(controller: _genderController, labelText: 'gender')),
+                  const SizedBox(width: 19),
+                  Flexible(child: OutlinedTextFormField(controller: _ageController, labelText: 'age')),
+                ],
+              ),
+              const SizedBox(height: 15),
+              OutlinedTextFormField(controller: _passwordController, labelText: 'password'),
+              const SizedBox(height: 15),
+              OutlinedTextFormField(controller: _confirmPasswordController, labelText: 'confirm password'),
+            ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
