@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
+import '../../widgets/list_placeholder.dart';
 
 class LessonsListPage extends StatefulWidget {
   const LessonsListPage({super.key, required this.sessionData});
@@ -252,7 +253,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
                   separatorBuilder: (context, index) => const SizedBox(height: 23),
                   itemCount: widget.sessionData.lessons!.length,
                 )
-              : const Center(child: Text('No Lessons available')),
+              : const ListPlaceHolder(placeHolderText: 'No lessons available'),
         ),
       ],
     );
