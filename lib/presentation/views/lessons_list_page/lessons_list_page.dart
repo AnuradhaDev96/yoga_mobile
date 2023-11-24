@@ -33,15 +33,20 @@ class _LessonsListPageState extends State<LessonsListPage> {
               width: MediaQuery.sizeOf(context).width,
               height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Colors.black,
-                    Colors.black.withOpacity(0),
-                  ]
-                )
-              ),
+                  gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
+                Colors.black,
+                Colors.black.withOpacity(0),
+              ])),
+            ),
+          ),
+          Positioned(
+            top: 31,
+            left: 23,
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              radius: 20,
+              onTap: () => Navigator.pop(context),
+              child: SvgPicture.asset(Assets.leftArrowWhite, width: 24, height: 24),
             ),
           ),
           Positioned(
