@@ -6,7 +6,7 @@ import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 
 class LessonsListPage extends StatefulWidget {
-  LessonsListPage({super.key, required this.sessionData});
+  const LessonsListPage({super.key, required this.sessionData});
 
   final SessionModel sessionData;
 
@@ -23,7 +23,37 @@ class _LessonsListPageState extends State<LessonsListPage> {
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth)
+          Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
+          Positioned(
+            top: 40,
+            right: 24,
+            child: InkWell(
+              onTap: () {
+                if (_isLessonPlayMode) {
+                  _switchToLessonListMode();
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              customBorder: const CircleBorder(),
+              radius: 20,
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.close_rounded,
+                    color: AppColors.black1,
+                    size: 26,
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
       bottomSheet: Material(
@@ -40,141 +70,155 @@ class _LessonsListPageState extends State<LessonsListPage> {
           curve: Curves.fastOutSlowIn,
           alignment: Alignment.topCenter,
           child: Container(
-            height:
-                _isLessonPlayMode ? MediaQuery.sizeOf(context).height * 0.35 : MediaQuery.sizeOf(context).height * 0.54,
-            width: MediaQuery.sizeOf(context).width,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(16),
-                topLeft: Radius.circular(16),
+              height: _isLessonPlayMode
+                  ? MediaQuery.sizeOf(context).height * 0.35
+                  : MediaQuery.sizeOf(context).height * 0.54,
+              width: MediaQuery.sizeOf(context).width,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(16),
+                  topLeft: Radius.circular(16),
+                ),
               ),
-            ),
-            child: CustomScrollView(
-              // controller: _bottomScrollController,
-              physics: const NeverScrollableScrollPhysics(),
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 12),
-                    child: Center(
-                      child: Container(
-                        width: 48,
-                        height: 5,
-                        decoration: BoxDecoration(color: AppColors.grey4, borderRadius: BorderRadius.circular(100)),
-                      ),
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 24, right: 14, bottom: 21),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            '${widget.sessionData.title ?? 'N/A'} ${widget.sessionData.category ?? 'N/A'}',
-                            style: const TextStyle(
-                              color: AppColors.black1,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '${widget.sessionData.lessons?.length ?? '0'} lesson${widget.sessionData.lessons?.length == 1 ? '' : 's'}',
-                          style: const TextStyle(
-                            color: AppColors.indigo1,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverFillRemaining(
-                  child: (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty)
-                      ? ListView.separated(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.only(bottom: 30),
-                          itemBuilder: (context, index) {
-                            var lessonData = widget.sessionData.lessons![index];
-
-                            return GestureDetector(
-                              onTap: () {
-                                _switchToLessonPlayMode();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.15),
-                                      offset: const Offset(0, 3),
-                                      spreadRadius: 0,
-                                      blurRadius: 10,
-                                    )
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Image.asset(Assets.lessonAvatar, width: 40, height: 40),
-                                        const SizedBox(width: 12),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              lessonData.title ?? 'N/A',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                color: AppColors.black1,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: MediaQuery.sizeOf(context).width * 0.6,
-                                              child: Text(
-                                                lessonData.description ?? 'N/A',
-                                                overflow: TextOverflow.clip,
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  color: Color(0xFF7B7F82),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    SvgPicture.asset(Assets.lessonCardPlayIcon, width: 27, height: 27),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(height: 23),
-                          itemCount: widget.sessionData.lessons!.length,
-                        )
-                      : const Center(child: Text('No Lessons available')),
-                ),
-              ],
-            ),
-          ),
+              child: _isLessonPlayMode ? _buildLessonPlayer(context) : _buildLessonList(context)),
         ),
       ),
     );
   }
 
+  Widget _buildLessonList(BuildContext context) {
+    return CustomScrollView(
+      // controller: _bottomScrollController,
+      physics: const NeverScrollableScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 12),
+            child: Center(
+              child: Container(
+                width: 48,
+                height: 5,
+                decoration: BoxDecoration(color: AppColors.grey4, borderRadius: BorderRadius.circular(100)),
+              ),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 24, right: 14, bottom: 21),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: Text(
+                    '${widget.sessionData.title ?? 'N/A'} ${widget.sessionData.category ?? 'N/A'}',
+                    style: const TextStyle(
+                      color: AppColors.black1,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Text(
+                  '${widget.sessionData.lessons?.length ?? '0'} lesson${widget.sessionData.lessons?.length == 1 ? '' : 's'}',
+                  style: const TextStyle(
+                    color: AppColors.indigo1,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverFillRemaining(
+          child: (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty)
+              ? ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(bottom: 30),
+                  itemBuilder: (context, index) {
+                    var lessonData = widget.sessionData.lessons![index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        _switchToLessonPlayMode();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              offset: const Offset(0, 3),
+                              spreadRadius: 0,
+                              blurRadius: 10,
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset(Assets.lessonAvatar, width: 40, height: 40),
+                                const SizedBox(width: 12),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      lessonData.title ?? 'N/A',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: AppColors.black1,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.6,
+                                      child: Text(
+                                        lessonData.description ?? 'N/A',
+                                        overflow: TextOverflow.clip,
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Color(0xFF7B7F82),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SvgPicture.asset(Assets.lessonCardPlayIcon, width: 27, height: 27),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(height: 23),
+                  itemCount: widget.sessionData.lessons!.length,
+                )
+              : const Center(child: Text('No Lessons available')),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLessonPlayer(BuildContext context) {
+    return SizedBox.shrink();
+  }
+
   void _switchToLessonPlayMode() {
     setState(() {
       _isLessonPlayMode = true;
+    });
+  }
+
+  void _switchToLessonListMode() {
+    setState(() {
+      _isLessonPlayMode = false;
     });
   }
 }
