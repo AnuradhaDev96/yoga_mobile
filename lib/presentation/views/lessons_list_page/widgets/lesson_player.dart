@@ -20,7 +20,7 @@ class LessonPlayer extends StatefulWidget {
 }
 
 class _LessonPlayerState extends State<LessonPlayer> with RouteAware {
-  final _lessonPlayerConfigCubit = LessonPlayerConfigCubit();
+  late final LessonPlayerConfigCubit _lessonPlayerConfigCubit;
 
   bool get _isVideoControllerInitialized => (_lessonPlayerConfigCubit.chewieController?.videoPlayerController != null &&
       _lessonPlayerConfigCubit.chewieController!.videoPlayerController.value.isInitialized);
@@ -28,10 +28,10 @@ class _LessonPlayerState extends State<LessonPlayer> with RouteAware {
   @override
   void initState() {
     super.initState();
+    _lessonPlayerConfigCubit = BlocProvider.of<LessonPlayerConfigCubit>(context);
 
     //initialize video url
-    // _lessonPlayerConfigCubit.configureVideoFromUrl(widget.videoUrl);
-    _lessonPlayerConfigCubit.configureVideoFromUrl('http://84.46.249.96:5000/uploads/videos/lesson_test2.mp4');
+    _lessonPlayerConfigCubit.configureVideoFromUrl(widget.videoUrl);
   }
 
   @override
@@ -61,33 +61,30 @@ class _LessonPlayerState extends State<LessonPlayer> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LessonPlayerConfigCubit>(
-      create: (context) => _lessonPlayerConfigCubit,
-      child: BlocBuilder<LessonPlayerConfigCubit, DataPayloadState>(
-        bloc: _lessonPlayerConfigCubit,
-        builder: (context, state) {
-          if (state is InitialState) {
-            return const SizedBox.shrink();
-          } else if (state is RequestingState) {
-            return Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
-              child: const CircularLoader(),
-            );
-          } else if (state is SuccessState) {
-            return SizedBox(
-              width: widget.width,
-              height: widget.height,
-              child: _isVideoControllerInitialized
-                  ? Chewie(controller: _lessonPlayerConfigCubit.chewieController!)
-                  : const CircularLoader(),
-            );
-          } else if (state is ErrorState) {
-            return ListPlaceHolder(placeHolderText: state.errorMessage);
-          }
-
+    return BlocBuilder<LessonPlayerConfigCubit, DataPayloadState>(
+      bloc: _lessonPlayerConfigCubit,
+      builder: (context, state) {
+        if (state is InitialState) {
           return const SizedBox.shrink();
-        },
-      ),
+        } else if (state is RequestingState) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
+            child: const CircularLoader(),
+          );
+        } else if (state is SuccessState) {
+          return SizedBox(
+            width: widget.width,
+            height: widget.height,
+            child: _isVideoControllerInitialized
+                ? Chewie(controller: _lessonPlayerConfigCubit.chewieController!)
+                : const CircularLoader(),
+          );
+        } else if (state is ErrorState) {
+          return ListPlaceHolder(placeHolderText: state.errorMessage);
+        }
+
+        return const SizedBox.shrink();
+      },
     );
   }
 }

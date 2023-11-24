@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../domain/models/lesson/lesson_model.dart';
 import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
+import '../../blocs/lesson_player/lesson_player_config_cubit.dart';
 import '../../widgets/circular_loader.dart';
 import '../../widgets/list_placeholder.dart';
 import 'widgets/lesson_player.dart';
@@ -22,8 +24,9 @@ class LessonsListPage extends StatefulWidget {
 class _LessonsListPageState extends State<LessonsListPage> {
   bool _isLessonPlayMode = false;
   LessonModel? _selectedLesson;
+  final _lessonPlayerConfigCubit = LessonPlayerConfigCubit();
 
-  final _lessonControllerHeightFraction = 0.35;//0.35
+  final _lessonControllerHeightFraction = 0.35; //0.35
   final _gradientHeightFraction = 0.3;
 
   @override
@@ -36,128 +39,131 @@ class _LessonsListPageState extends State<LessonsListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey4,
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          // Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
-          _buildLessonPlayer(context),
-          Positioned(
-            bottom: MediaQuery.sizeOf(context).height * 0.1,
-            child: Container(
-              width: MediaQuery.sizeOf(context).width,
-              height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Colors.black,
-                    Colors.black.withOpacity(0),
+    return BlocProvider<LessonPlayerConfigCubit>(
+      create: (context) => _lessonPlayerConfigCubit,
+      child: Scaffold(
+        backgroundColor: AppColors.grey4,
+        body: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            // Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
+            _buildLessonPlayer(context),
+            Positioned(
+              bottom: MediaQuery.sizeOf(context).height * 0.1,
+              child: Container(
+                width: MediaQuery.sizeOf(context).width,
+                height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.black,
+                      Colors.black.withOpacity(0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 31,
+              left: 23,
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                radius: 30,
+                onTap: () => Navigator.pop(context),
+                child: SvgPicture.asset(Assets.leftArrowWhite, width: 24, height: 24),
+              ),
+            ),
+            Positioned(
+              top: 40,
+              right: 24,
+              child: InkWell(
+                onTap: () {
+                  if (_isLessonPlayMode) {
+                    _switchToLessonListMode();
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                customBorder: const CircleBorder(),
+                radius: 20,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.close_rounded,
+                      color: AppColors.black1,
+                      size: 26,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: MediaQuery.sizeOf(context).height * 0.18,
+              left: 24,
+              right: 24,
+              child: AnimatedOpacity(
+                opacity: _isLessonPlayMode ? 1 : 0,
+                duration: const Duration(milliseconds: 1400),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _selectedLesson?.title ?? 'N/A',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      _selectedLesson?.description ?? 'N/A',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 31,
-            left: 23,
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              radius: 30,
-              onTap: () => Navigator.pop(context),
-              child: SvgPicture.asset(Assets.leftArrowWhite, width: 24, height: 24),
+          ],
+        ),
+        bottomSheet: Material(
+          surfaceTintColor: Colors.transparent,
+          color: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(16),
+              topLeft: Radius.circular(16),
             ),
           ),
-          Positioned(
-            top: 40,
-            right: 24,
-            child: InkWell(
-              onTap: () {
-                if (_isLessonPlayMode) {
-                  _switchToLessonListMode();
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-              customBorder: const CircleBorder(),
-              radius: 20,
-              child: Container(
-                width: 48,
-                height: 48,
+          child: AnimatedSize(
+            duration: const Duration(milliseconds: 1400),
+            curve: Curves.fastOutSlowIn,
+            alignment: Alignment.topCenter,
+            child: Container(
+                height: _isLessonPlayMode
+                    ? MediaQuery.sizeOf(context).height * _lessonControllerHeightFraction
+                    : MediaQuery.sizeOf(context).height * 0.54,
+                width: MediaQuery.sizeOf(context).width,
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.close_rounded,
-                    color: AppColors.black1,
-                    size: 26,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(16),
+                    topLeft: Radius.circular(16),
                   ),
                 ),
-              ),
-            ),
+                child: _isLessonPlayMode ? _buildLessonPlayerController(context) : _buildLessonList(context)),
           ),
-          Positioned(
-            bottom: MediaQuery.sizeOf(context).height * 0.18,
-            left: 24,
-            right: 24,
-            child: AnimatedOpacity(
-              opacity: _isLessonPlayMode ? 1 : 0,
-              duration: const Duration(milliseconds: 1400),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _selectedLesson?.title ?? 'N/A',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    _selectedLesson?.description ?? 'N/A',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomSheet: Material(
-        surfaceTintColor: Colors.transparent,
-        color: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(16),
-            topLeft: Radius.circular(16),
-          ),
-        ),
-        child: AnimatedSize(
-          duration: const Duration(milliseconds: 1400),
-          curve: Curves.fastOutSlowIn,
-          alignment: Alignment.topCenter,
-          child: Container(
-              height: _isLessonPlayMode
-                  ? MediaQuery.sizeOf(context).height * _lessonControllerHeightFraction
-                  : MediaQuery.sizeOf(context).height * 0.54,
-              width: MediaQuery.sizeOf(context).width,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(16),
-                  topLeft: Radius.circular(16),
-                ),
-              ),
-              child: _isLessonPlayMode ? _buildLessonPlayerController(context) : _buildLessonList(context)),
         ),
       ),
     );
