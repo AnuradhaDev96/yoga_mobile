@@ -58,8 +58,14 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
     chewieController!.videoPlayerController.pause();
   }
 
-  bool get isVideoPlaying {
-    return chewieController!.isPlaying;
+  void jumpForward() {
+    var currentPosition = chewieController!.videoPlayerController.value.position;
+    chewieController!.videoPlayerController.seekTo(currentPosition + const Duration(seconds: 5));
+  }
+
+  void jumpBackward() {
+    var currentPosition = chewieController!.videoPlayerController.value.position;
+    chewieController!.videoPlayerController.seekTo(currentPosition - const Duration(seconds: 5));
   }
 
   bool get isVideoControllerInitialized =>
