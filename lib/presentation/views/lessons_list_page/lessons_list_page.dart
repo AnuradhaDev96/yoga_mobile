@@ -15,7 +15,8 @@ class LessonsListPage extends StatefulWidget {
 }
 
 class _LessonsListPageState extends State<LessonsListPage> {
-  // final _bottomScrollController = ScrollController();
+  bool _isLessonPlayMode = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +27,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
         ],
       ),
       bottomSheet: Container(
-        height: MediaQuery.sizeOf(context).height * 0.54,
+        height: _isLessonPlayMode ? MediaQuery.sizeOf(context).height * 0.2 : MediaQuery.sizeOf(context).height * 0.54,
         width: MediaQuery.sizeOf(context).width,
         decoration: const BoxDecoration(
             color: Colors.white,
@@ -85,55 +86,61 @@ class _LessonsListPageState extends State<LessonsListPage> {
                       padding: const EdgeInsets.only(bottom: 30),
                       itemBuilder: (context, index) {
                         var lessonData = widget.sessionData.lessons![index];
-                        return Container(
-                          padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.15),
-                                offset: const Offset(0, 3),
-                                spreadRadius: 0,
-                                blurRadius: 10,
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(Assets.lessonAvatar, width: 40, height: 40),
-                                  const SizedBox(width: 12),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        lessonData.title ?? 'N/A',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: AppColors.black1,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: MediaQuery.sizeOf(context).width * 0.6,
-                                        child: Text(
-                                          lessonData.description ?? 'N/A',
-                                          overflow: TextOverflow.clip,
-                                          maxLines: 1,
+
+                        return GestureDetector(
+                          onTap: () {
+                            _switchToLessonPlayMode();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  offset: const Offset(0, 3),
+                                  spreadRadius: 0,
+                                  blurRadius: 10,
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(Assets.lessonAvatar, width: 40, height: 40),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          lessonData.title ?? 'N/A',
                                           style: const TextStyle(
-                                            fontSize: 13,
-                                            color: Color(0xFF7B7F82),
+                                            fontSize: 16,
+                                            color: AppColors.black1,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SvgPicture.asset(Assets.lessonCardPlayIcon, width: 27, height: 27),
-                            ],
+                                        SizedBox(
+                                          width: MediaQuery.sizeOf(context).width * 0.6,
+                                          child: Text(
+                                            lessonData.description ?? 'N/A',
+                                            overflow: TextOverflow.clip,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Color(0xFF7B7F82),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SvgPicture.asset(Assets.lessonCardPlayIcon, width: 27, height: 27),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -146,5 +153,11 @@ class _LessonsListPageState extends State<LessonsListPage> {
         ),
       ),
     );
+  }
+
+  void _switchToLessonPlayMode() {
+    setState(() {
+      _isLessonPlayMode = true;
+    });
   }
 }
