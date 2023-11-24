@@ -6,6 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 import '../../presentation/blocs/alert_cubit.dart';
+import '../../presentation/blocs/authentication_bloc.dart';
+import '../../presentation/states/authentication_state.dart';
 import '../../utils/constants/preference_keys.dart';
 import '../../utils/resources/message_utils.dart';
 import '../repositories/local_storage_repository.dart';
@@ -71,6 +73,17 @@ class ApiClient extends ApiHelper {
 
     try {
       var response = await http.get(endpoint, headers: headers);
+
+      // Handle token expire event
+      if (response.statusCode == 400) {
+        var decoded = jsonDecode(response.body);
+        if (decoded is String && decoded.contains('Token has expired')) {
+          AuthenticationBloc().add(LoggedOut());
+          return null;
+        }
+        return response;
+      }
+
       logEndpoint(endpoint, response.statusCode);
       return response;
     } on SocketException catch (exception) {
