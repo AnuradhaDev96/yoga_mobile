@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../config/utility/route_observers.dart';
+import '../../../../domain/enums/data_error_enum.dart';
 import '../../../blocs/lesson_player/lesson_player_config_cubit.dart';
 import '../../../states/data_payload_state.dart';
 import '../../../widgets/circular_loader.dart';
@@ -80,7 +81,10 @@ class _LessonPlayerState extends State<LessonPlayer> with RouteAware {
                 : const CircularLoader(),
           );
         } else if (state is ErrorState) {
-          return ListPlaceHolder(placeHolderText: state.errorMessage);
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
+            child: ListPlaceHolder(placeHolderText: state.errorMessage, errorType: DataErrorEnum.videoError),
+          );
         }
 
         return const SizedBox.shrink();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../domain/enums/data_error_enum.dart';
 import '../../../domain/models/lesson/lesson_model.dart';
 import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
@@ -165,7 +166,8 @@ class _LessonsListPageState extends State<LessonsListPage> {
                         topLeft: Radius.circular(16),
                       ),
                     ),
-                    child: _isLessonPlayMode ? _buildLessonPlayerController(context) : _buildLessonList(context)),
+                    child:
+                        _isLessonPlayMode ? _buildLessonPlayerController(context, state) : _buildLessonList(context)),
               ),
             ),
           );
@@ -292,7 +294,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
     );
   }
 
-  Widget _buildLessonPlayerController(BuildContext context) {
+  Widget _buildLessonPlayerController(BuildContext context, DataPayloadState state) {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -307,19 +309,26 @@ class _LessonsListPageState extends State<LessonsListPage> {
             ),
           ),
         ),
-        SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.76),
-                child: SvgPicture.asset(Assets.playerPlayButton, width: 58, height: 58),
+        (state is SuccessState)
+            ? SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.76),
+                      child: SvgPicture.asset(Assets.playerPlayButton, width: 58, height: 58),
+                    ),
+                    SvgPicture.asset(Assets.playerJumpForward, width: 26, height: 26),
+                  ],
+                ),
+              )
+            : const SliverFillRemaining(
+                child: ListPlaceHolder(
+                  errorType: DataErrorEnum.controllerError,
+                  placeHolderText: 'Video controls are disabled',
+                ),
               ),
-              SvgPicture.asset(Assets.playerJumpForward, width: 26, height: 26),
-            ],
-          ),
-        ),
       ],
     );
   }

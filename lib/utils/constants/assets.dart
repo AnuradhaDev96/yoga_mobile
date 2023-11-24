@@ -15,6 +15,8 @@ abstract class Assets {
   static const playerJumpForward = 'assets/svg/player_jump_forward.svg';
   static const playerJumpBackward = 'assets/svg/player_jump_backward.svg';
   static const emptyListIcon = 'assets/svg/empty_list_icon.svg';
+  static const videoErrorIcon = 'assets/svg/video_error_icon.svg';
+  static const videoControllerIcon = 'assets/svg/video_controller_icon.svg';
 
   // lottie
   static const loadingDots = 'assets/lottie/loading_dots.json';

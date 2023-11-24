@@ -16,7 +16,7 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
     emit(RequestingState());
 
     if (url.isEmpty) {
-      emit(ErrorState("Video is not available"));
+      emit(ErrorState("Video file is not available"));
     }
 
     // Config video url
@@ -30,10 +30,10 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
 
         emit(SuccessState());
       } else {
-        emit(ErrorState("Error in initializing video"));
+        emit(ErrorState("This video cannot be initialized"));
       }
     } catch (e) {
-      emit(ErrorState("Unsupported video source"));
+      emit(ErrorState("This video cannot be played"));
     }
   }
 
@@ -48,5 +48,9 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
         bufferedColor: AppColors.indigo1.withOpacity(0.25),
       ),
     );
+  }
+
+  void resumePlay() {
+    chewieController!.videoPlayerController.play();
   }
 }

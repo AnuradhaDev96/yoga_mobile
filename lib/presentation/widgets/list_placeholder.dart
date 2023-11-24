@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../domain/enums/data_error_enum.dart';
 import '../../utils/constants/app_colors.dart';
-import '../../utils/constants/assets.dart';
 
 class ListPlaceHolder extends StatelessWidget {
-  const ListPlaceHolder({super.key, required this.placeHolderText});
+  const ListPlaceHolder({
+    super.key,
+    required this.placeHolderText,
+    this.errorType = DataErrorEnum.general,
+  });
 
   final String placeHolderText;
+  final DataErrorEnum errorType;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +21,7 @@ class ListPlaceHolder extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            Assets.emptyListIcon,
+            errorType.iconSource,
             width: 75,
             fit: BoxFit.fitWidth,
           ),
