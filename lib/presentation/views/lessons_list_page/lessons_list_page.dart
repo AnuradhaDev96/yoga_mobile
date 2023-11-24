@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../domain/models/lesson/lesson_model.dart';
 import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
@@ -17,9 +18,18 @@ class LessonsListPage extends StatefulWidget {
 
 class _LessonsListPageState extends State<LessonsListPage> {
   bool _isLessonPlayMode = false;
+  LessonModel? _selectedLesson;
 
   final _bottomContentHeightFraction = 0.35;
   final _gradientHeightFraction = 0.3;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty) {
+      _selectedLesson =  widget.sessionData.lessons!.first;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,21 +97,21 @@ class _LessonsListPageState extends State<LessonsListPage> {
             child: AnimatedOpacity(
               opacity: _isLessonPlayMode ? 1 : 0,
               duration: const Duration(milliseconds: 1400),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Lesson name",
-                    style: TextStyle(
+                    _selectedLesson?.title ?? 'N/A',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                    style: TextStyle(
+                    _selectedLesson?.description ?? 'N/A',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 13,
                     ),
@@ -197,7 +207,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
 
                     return GestureDetector(
                       onTap: () {
-                        _switchToLessonPlayMode();
+                        _switchToLessonPlayMode(lessonData);
                       },
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
@@ -293,9 +303,10 @@ class _LessonsListPageState extends State<LessonsListPage> {
     );
   }
 
-  void _switchToLessonPlayMode() {
+  void _switchToLessonPlayMode(LessonModel lessonData) {
     setState(() {
       _isLessonPlayMode = true;
+      _selectedLesson = lessonData;
     });
   }
 
