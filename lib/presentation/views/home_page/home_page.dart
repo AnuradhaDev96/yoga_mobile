@@ -158,26 +158,20 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
+            SliverFillRemaining(
               child: FutureBuilder(
                 future: GetIt.instance<YogaActivitiesRepository>().getSessions(),
                 builder: (context, snapshot) {
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Padding(
-                      padding: EdgeInsets.only(top: 30),
-                      child: CircularLoader(),
-                    );
+                    return const CircularLoader();
                   }
 
                   if (snapshot.hasData) {
                     var listData = snapshot.data;
 
                     if (listData == null || listData.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 30),
-                        child: ListPlaceHolder(placeHolderText: 'No sessions available'),
-                      );
+                      return const ListPlaceHolder(placeHolderText: 'No sessions available');
                     } else {
                       List<SessionModel> topSessions = [];
                       if (listData.length >= 3) {
@@ -316,10 +310,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   } else {
-                    return const Padding(
-                      padding: EdgeInsets.only(top: 30),
-                      child: ListPlaceHolder(placeHolderText: 'No sessions available'),
-                    );
+                    return const ListPlaceHolder(placeHolderText: 'No sessions available');
                   }
                 },
               ),
