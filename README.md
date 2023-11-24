@@ -11,3 +11,6 @@ Package name: anuradha
 - Domain layer: Middle layer between data layer and bloc layer. Include interfaces and dependency relations that can be used in bloc layer and data layer
 - Presentation layer (bloc layer): Middle layer between views and domain layer
 - Presentation layer (views layer): Layer directly accessible by the user
+
+### Features
+- Home page can be refreshed using RefreshIndicator

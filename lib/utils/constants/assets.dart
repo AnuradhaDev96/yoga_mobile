@@ -5,12 +5,19 @@ abstract class Assets {
 
   // svg
   static const leftArrow = 'assets/svg/back_arrow_box.svg';
+  static const leftArrowWhite = 'assets/svg/back_arrow_white.svg';
   static const rightArrow = 'assets/svg/right_arrow.svg';
   static const errorFlushbarIcon = 'assets/svg/error_flushbar_icon.svg';
   static const successFlushbarIcon = 'assets/svg/success_flushbar_icon.svg';
   static const logoutIcon = 'assets/svg/logout_icon.svg';
+  static const lessonCardPlayIcon = 'assets/svg/lesson_card_play_icon.svg';
+  static const playerPlayButton = 'assets/svg/player_play_button.svg';
+  static const playerJumpForward = 'assets/svg/player_jump_forward.svg';
+  static const playerJumpBackward = 'assets/svg/player_jump_backward.svg';
+  static const emptyListIcon = 'assets/svg/empty_list_icon.svg';
 
   // lottie
   static const loadingDots = 'assets/lottie/loading_dots.json';
   static const userAvatarPng = 'assets/png/user_avatar.png';
+  static const lessonAvatar = 'assets/png/lesson_avatar.png';
 }
