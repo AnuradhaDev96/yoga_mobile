@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -5,6 +6,7 @@ import '../../../domain/models/lesson/lesson_model.dart';
 import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
+import '../../widgets/circular_loader.dart';
 import '../../widgets/list_placeholder.dart';
 
 class LessonsListPage extends StatefulWidget {
@@ -27,27 +29,52 @@ class _LessonsListPageState extends State<LessonsListPage> {
   void initState() {
     super.initState();
     if (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty) {
-      _selectedLesson =  widget.sessionData.lessons!.first;
+      _selectedLesson = widget.sessionData.lessons!.first;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.grey4,
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
+          // Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
+          CachedNetworkImage(
+            height: MediaQuery.sizeOf(context).height * 0.8,
+            fit: BoxFit.fitHeight,
+            imageUrl: widget.sessionData.imageUrl ?? '',
+            placeholder: (_, __) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
+                child: const CircularLoader(),
+              );
+            },
+            errorWidget: (_, __, ___) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
+                  child: const Icon(Icons.image, size: 60),
+                ),
+              );
+            },
+          ),
           Positioned(
-            bottom: 0,
+            bottom: MediaQuery.sizeOf(context).height * 0.1,
             child: Container(
               width: MediaQuery.sizeOf(context).width,
               height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
-                Colors.black,
-                Colors.black.withOpacity(0),
-              ])),
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.black,
+                    Colors.black.withOpacity(0),
+                  ],
+                ),
+              ),
             ),
           ),
           Positioned(
@@ -55,7 +82,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
             left: 23,
             child: InkWell(
               customBorder: const CircleBorder(),
-              radius: 20,
+              radius: 30,
               onTap: () => Navigator.pop(context),
               child: SvgPicture.asset(Assets.leftArrowWhite, width: 24, height: 24),
             ),
@@ -91,7 +118,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
             ),
           ),
           Positioned(
-            bottom: 30,
+            bottom: MediaQuery.sizeOf(context).height * 0.18,
             left: 24,
             right: 24,
             child: AnimatedOpacity(
