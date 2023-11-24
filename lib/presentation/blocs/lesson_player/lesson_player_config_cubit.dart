@@ -53,4 +53,15 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
   void resumePlay() {
     chewieController!.videoPlayerController.play();
   }
+
+  void pausePlay() {
+    chewieController!.videoPlayerController.pause();
+  }
+
+  bool get isVideoPlaying {
+    return chewieController!.isPlaying;
+  }
+
+  bool get isVideoControllerInitialized =>
+      (chewieController?.videoPlayerController != null && chewieController!.videoPlayerController.value.isInitialized);
 }

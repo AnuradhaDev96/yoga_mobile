@@ -314,10 +314,37 @@ class _LessonsListPageState extends State<LessonsListPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.76),
-                      child: SvgPicture.asset(Assets.playerPlayButton, width: 58, height: 58),
+                    GestureDetector(
+                      onTap: () {},
+                      child: SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (_lessonPlayerConfigCubit.chewieController!.isPlaying) {
+                          _lessonPlayerConfigCubit.pausePlay();
+                        } else {
+                          _lessonPlayerConfigCubit.resumePlay();
+                        }
+                      },
+                      child: ValueListenableBuilder(
+                        valueListenable: _lessonPlayerConfigCubit.chewieController!.videoPlayerController,
+                        builder: (context, videoController, _) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.76),
+                            child: videoController.isPlaying
+                                ? SvgPicture.asset(
+                                    Assets.playerPauseButton,
+                                    width: 58,
+                                    height: 58,
+                                  )
+                                : SvgPicture.asset(
+                                    Assets.playerPlayButton,
+                                    width: 58,
+                                    height: 58,
+                                  ),
+                          );
+                        }
+                      ),
                     ),
                     SvgPicture.asset(Assets.playerJumpForward, width: 26, height: 26),
                   ],
