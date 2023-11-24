@@ -190,7 +190,12 @@ class _HomePageState extends State<HomePage> {
 
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => LessonsListPage()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LessonsListPage(sessionData: sessionData),
+                                ),
+                              );
                             },
                             child: Container(
                               margin: const EdgeInsets.only(left: 20, right: 20),
