@@ -70,17 +70,22 @@ class _LessonsListPageState extends State<LessonsListPage> {
                         LessonPlayerHandler(sessionImageUrl: widget.sessionData.imageUrl ?? ''),
                         Positioned(
                           bottom: (playerConfigState is SuccessState) ? -10 : MediaQuery.sizeOf(context).height * 0.2,
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width,
-                            height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.black,
-                                  Colors.black.withOpacity(0),
-                                ],
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onDoubleTap: () => _enterFullScreen(),
+                            onVerticalDragEnd: (dragDetails) => _enterFullScreen(),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width,
+                              height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.black,
+                                    Colors.black.withOpacity(0),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -138,26 +143,31 @@ class _LessonsListPageState extends State<LessonsListPage> {
                           child: AnimatedOpacity(
                             opacity: viewMode is LessonsPlayerMode ? 1 : 0,
                             duration: const Duration(milliseconds: 300),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _switchModeCubit.selectedLesson?.title ?? 'N/A',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onDoubleTap: () => _enterFullScreen(),
+                              onVerticalDragEnd: (dragDetails) => _enterFullScreen(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _switchModeCubit.selectedLesson?.title ?? 'N/A',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  _switchModeCubit.selectedLesson?.description ?? 'N/A',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
+                                  Text(
+                                    _switchModeCubit.selectedLesson?.description ?? 'N/A',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -203,5 +213,11 @@ class _LessonsListPageState extends State<LessonsListPage> {
 
   void _switchToLessonListMode() {
     _switchModeCubit.switchToLessonListMode();
+  }
+
+  void _enterFullScreen() {
+    if (_lessonPlayerConfigCubit.isVideoControllerInitialized) {
+      _lessonPlayerConfigCubit.chewieController!.enterFullScreen();
+    }
   }
 }
