@@ -80,12 +80,14 @@ class _LessonsListPageState extends State<LessonsListPage> {
               ),
             ),
           ),
-          if (_isLessonPlayMode)
-            const Positioned(
-              bottom: 30,
-              left: 24,
-              right: 24,
-              child: Column(
+          Positioned(
+            bottom: 30,
+            left: 24,
+            right: 24,
+            child: AnimatedOpacity(
+              opacity: _isLessonPlayMode ? 1 : 0,
+              duration: const Duration(milliseconds: 1400),
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -107,6 +109,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
                 ],
               ),
             ),
+          ),
         ],
       ),
       bottomSheet: Material(
@@ -142,7 +145,6 @@ class _LessonsListPageState extends State<LessonsListPage> {
 
   Widget _buildLessonList(BuildContext context) {
     return CustomScrollView(
-      // controller: _bottomScrollController,
       physics: const NeverScrollableScrollPhysics(),
       slivers: [
         SliverToBoxAdapter(
