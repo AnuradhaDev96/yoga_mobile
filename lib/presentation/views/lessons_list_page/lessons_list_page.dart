@@ -23,7 +23,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
   bool _isLessonPlayMode = false;
   LessonModel? _selectedLesson;
 
-  final _lessonControllerHeightFraction = 0;//0.35
+  final _lessonControllerHeightFraction = 0.35;//0.35
   final _gradientHeightFraction = 0.3;
 
   @override
@@ -315,10 +315,15 @@ class _LessonsListPageState extends State<LessonsListPage> {
 
   Widget _buildLessonPlayer(BuildContext context) {
     if (_isLessonPlayMode) {
-      return LessonPlayer(
-        videoUrl: _selectedLesson?.videoUrl ?? '',
-        height: MediaQuery.sizeOf(context).height * 0.8,
-        width: MediaQuery.sizeOf(context).width,
+      return Positioned(
+        top: 0,
+        child: LessonPlayer(
+          videoUrl: _selectedLesson?.videoUrl ?? '',
+          height: MediaQuery.sizeOf(context).height * 0.65,
+          width: MediaQuery.sizeOf(context).width,
+          // height: 300,
+          // width: MediaQuery.sizeOf(context).width,
+        ),
       );
     } else {
       return CachedNetworkImage(

@@ -74,7 +74,7 @@ class _LessonPlayerState extends State<LessonPlayer> with RouteAware {
               child: const CircularLoader(),
             );
           } else if (state is SuccessState) {
-            SizedBox(
+            return SizedBox(
               width: widget.width,
               height: widget.height,
               child: _isVideoControllerInitialized

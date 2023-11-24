@@ -41,8 +41,10 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
     chewieController = ChewieController(
       videoPlayerController: _videoPlayerController!,
       aspectRatio: _videoPlayerController!.value.aspectRatio,
+      // autoPlay: true,
+      autoInitialize: true,
       materialProgressColors: ChewieProgressColors(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.white,
         handleColor: AppColors.indigo1,
         playedColor: AppColors.indigo1.withOpacity(0.8),
         bufferedColor: AppColors.indigo1.withOpacity(0.25),
