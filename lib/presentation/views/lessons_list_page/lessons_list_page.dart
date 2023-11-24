@@ -9,6 +9,7 @@ import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import '../../blocs/lesson_player/lesson_player_config_cubit.dart';
+import '../../../utils/extensions/convert_duration_values.dart';
 import '../../states/data_payload_state.dart';
 import '../../widgets/circular_loader.dart';
 import '../../widgets/list_placeholder.dart';
@@ -324,48 +325,73 @@ class _LessonsListPageState extends State<LessonsListPage> {
                   builder: (context) {
                     if (_lessonPlayerConfigCubit.isVideoControllerInitialized) {
                       return SliverToBoxAdapter(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                _lessonPlayerConfigCubit.jumpBackward();
-                              },
-                              icon: SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                if (_lessonPlayerConfigCubit.isVideoControllerInitialized &&
-                                    _lessonPlayerConfigCubit.chewieController!.isPlaying) {
-                                  _lessonPlayerConfigCubit.pausePlay();
-                                } else {
-                                  _lessonPlayerConfigCubit.resumePlay();
-                                }
-                              },
-                              child: ValueListenableBuilder(
-                                  valueListenable: _lessonPlayerConfigCubit.chewieController!.videoPlayerController,
-                                  builder: (context, videoController, _) {
-                                    return videoController.isPlaying
-                                        ? SvgPicture.asset(
-                                            Assets.playerPauseButton,
-                                            width: 58,
-                                            height: 58,
-                                          )
-                                        : SvgPicture.asset(
-                                            Assets.playerPlayButton,
-                                            width: 58,
-                                            height: 58,
-                                          );
-                                  }),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                _lessonPlayerConfigCubit.jumpForward();
-                              },
-                              icon: SvgPicture.asset(Assets.playerJumpForward, width: 26, height: 26),
-                            ),
-                          ],
-                        ),
+                        child: ValueListenableBuilder(
+                            valueListenable: _lessonPlayerConfigCubit.chewieController!.videoPlayerController,
+                            builder: (context, videoController, _) {
+                              return Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        videoController.position.inMinutesAndSeconds,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        videoController.duration.inMinutesAndSeconds,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          _lessonPlayerConfigCubit.jumpBackward();
+                                        },
+                                        icon: SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_lessonPlayerConfigCubit.isVideoControllerInitialized &&
+                                              _lessonPlayerConfigCubit.chewieController!.isPlaying) {
+                                            _lessonPlayerConfigCubit.pausePlay();
+                                          } else {
+                                            _lessonPlayerConfigCubit.resumePlay();
+                                          }
+                                        },
+                                        child: videoController.isPlaying
+                                            ? SvgPicture.asset(
+                                                Assets.playerPauseButton,
+                                                width: 58,
+                                                height: 58,
+                                              )
+                                            : SvgPicture.asset(
+                                                Assets.playerPlayButton,
+                                                width: 58,
+                                                height: 58,
+                                              ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          _lessonPlayerConfigCubit.jumpForward();
+                                        },
+                                        icon: SvgPicture.asset(Assets.playerJumpForward, width: 26, height: 26),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }),
                       );
                     } else {
                       return const SizedBox.shrink();
