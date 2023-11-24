@@ -8,6 +8,7 @@ import '../../../domain/models/lesson/lesson_model.dart';
 import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
+import '../../blocs/lesson_list_page/switch_lesson_mode_cubit.dart';
 import '../../blocs/lesson_player/lesson_player_config_cubit.dart';
 import '../../../utils/extensions/convert_duration_values.dart';
 import '../../states/data_payload_state.dart';
@@ -25,9 +26,10 @@ class LessonsListPage extends StatefulWidget {
 }
 
 class _LessonsListPageState extends State<LessonsListPage> {
-  bool _isLessonPlayMode = false;
-  LessonModel? _selectedLesson;
+
+  // LessonModel? _selectedLesson;
   final _lessonPlayerConfigCubit = LessonPlayerConfigCubit();
+  final _switchModeCubit = SwitchLessonModeCubit();
 
   final _lessonControllerHeightFraction = 0.35; //0.35
   final _gradientHeightFraction = 0.3;
@@ -38,159 +40,173 @@ class _LessonsListPageState extends State<LessonsListPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty) {
-      _selectedLesson = widget.sessionData.lessons!.first;
-    }
+    // if (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty) {
+    //   _selectedLesson = widget.sessionData.lessons!.first;
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LessonPlayerConfigCubit>(
-      create: (context) => _lessonPlayerConfigCubit,
-      child: BlocBuilder<LessonPlayerConfigCubit, DataPayloadState>(
-        builder: (context, state) {
-          return WillPopScope(
-            onWillPop: () async {
-              if (_isLessonPlayMode) {
-                _switchToLessonListMode();
-                return false;
-              } else {
-                return true;
-              }
-            },
-            child: Scaffold(
-              backgroundColor: AppColors.grey4,
-              body: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  _buildLessonPlayer(context),
-                  Positioned(
-                    bottom: (state is SuccessState) ? -10 : MediaQuery.sizeOf(context).height * 0.2,
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [
-                            Colors.black,
-                            Colors.black.withOpacity(0),
-                          ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LessonPlayerConfigCubit>(
+          create: (context) => _lessonPlayerConfigCubit,
+        ),
+        BlocProvider<SwitchLessonModeCubit>(
+          create: (context) => _switchModeCubit,
+        ),
+      ],
+      child: BlocBuilder<SwitchLessonModeCubit, ViewMode>(
+        bloc: _switchModeCubit,
+        builder: (context, viewMode) {
+          return BlocBuilder<LessonPlayerConfigCubit, DataPayloadState>(
+            bloc: _lessonPlayerConfigCubit,
+            builder: (context, playerConfigState) {
+              return WillPopScope(
+                onWillPop: () async {
+                  if (viewMode is LessonsPlayerMode) {
+                    _switchToLessonListMode();
+                    return false;
+                  } else {
+                    return true;
+                  }
+                },
+                child: Scaffold(
+                  backgroundColor: AppColors.grey4,
+                  body: Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      _buildLessonPlayer(context, viewMode),
+                      Positioned(
+                        bottom: (playerConfigState is SuccessState) ? -10 : MediaQuery.sizeOf(context).height * 0.2,
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black,
+                                Colors.black.withOpacity(0),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      Positioned(
+                        top: 31,
+                        left: 23,
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
+                          radius: 30,
+                          onTap: () {
+                            if (viewMode is LessonsPlayerMode) {
+                              _switchToLessonListMode();
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: SvgPicture.asset(Assets.leftArrowWhite, width: 24, height: 24),
+                        ),
+                      ),
+                      Positioned(
+                        top: 40,
+                        right: 24,
+                        child: InkWell(
+                          onTap: () {
+                            if (viewMode is LessonsPlayerMode) {
+                              _switchToLessonListMode();
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          },
+                          customBorder: const CircleBorder(),
+                          radius: 20,
+                          child: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.close_rounded,
+                                color: AppColors.black1,
+                                size: 26,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: (playerConfigState is SuccessState) ? 10 : MediaQuery.sizeOf(context).height * 0.38,
+                        left: 24,
+                        right: 24,
+                        child: AnimatedOpacity(
+                          opacity: viewMode is LessonsPlayerMode ? 1 : 0,
+                          duration: const Duration(milliseconds: 300),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _switchModeCubit.selectedLesson?.title ?? 'N/A',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                _switchModeCubit.selectedLesson?.description ?? 'N/A',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Positioned(
-                    top: 31,
-                    left: 23,
-                    child: InkWell(
-                      customBorder: const CircleBorder(),
-                      radius: 30,
-                      onTap: () {
-                        if (_isLessonPlayMode) {
-                          _switchToLessonListMode();
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: SvgPicture.asset(Assets.leftArrowWhite, width: 24, height: 24),
+                  bottomSheet: Material(
+                    surfaceTintColor: Colors.transparent,
+                    color: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(16),
+                        topLeft: Radius.circular(16),
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    top: 40,
-                    right: 24,
-                    child: InkWell(
-                      onTap: () {
-                        if (_isLessonPlayMode) {
-                          _switchToLessonListMode();
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                      customBorder: const CircleBorder(),
-                      radius: 20,
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 1400),
+                      curve: Curves.fastOutSlowIn,
+                      alignment: Alignment.topCenter,
                       child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.close_rounded,
-                            color: AppColors.black1,
-                            size: 26,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: (state is SuccessState) ? 10 : MediaQuery.sizeOf(context).height * 0.38,
-                    left: 24,
-                    right: 24,
-                    child: AnimatedOpacity(
-                      opacity: _isLessonPlayMode ? 1 : 0,
-                      duration: const Duration(milliseconds: 300),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _selectedLesson?.title ?? 'N/A',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                          height: viewMode is LessonsPlayerMode
+                              ? MediaQuery.sizeOf(context).height * _lessonControllerHeightFraction
+                              : MediaQuery.sizeOf(context).height * 0.54,
+                          width: MediaQuery.sizeOf(context).width,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(16),
+                              topLeft: Radius.circular(16),
                             ),
                           ),
-                          Text(
-                            _selectedLesson?.description ?? 'N/A',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
+                          child: viewMode is LessonsPlayerMode
+                              ? _buildLessonPlayerController(context, playerConfigState)
+                              : _buildLessonList(context)),
                     ),
                   ),
-                ],
-              ),
-              bottomSheet: Material(
-                surfaceTintColor: Colors.transparent,
-                color: Colors.white,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    topLeft: Radius.circular(16),
-                  ),
                 ),
-                child: AnimatedSize(
-                  duration: const Duration(milliseconds: 1400),
-                  curve: Curves.fastOutSlowIn,
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                      height: _isLessonPlayMode
-                          ? MediaQuery.sizeOf(context).height * _lessonControllerHeightFraction
-                          : MediaQuery.sizeOf(context).height * 0.54,
-                      width: MediaQuery.sizeOf(context).width,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(16),
-                          topLeft: Radius.circular(16),
-                        ),
-                      ),
-                      child:
-                          _isLessonPlayMode ? _buildLessonPlayerController(context, state) : _buildLessonList(context)),
-                ),
-              ),
-            ),
+              );
+            },
           );
-        },
+        }
       ),
     );
   }
@@ -418,10 +434,10 @@ class _LessonsListPageState extends State<LessonsListPage> {
     );
   }
 
-  Widget _buildLessonPlayer(BuildContext context) {
-    if (_isLessonPlayMode) {
+  Widget _buildLessonPlayer(BuildContext context, ViewMode viewMode) {
+    if (viewMode is LessonsPlayerMode) {
       return LessonPlayer(
-        videoUrl: _selectedLesson?.videoUrl ?? '',
+        videoUrl: _switchModeCubit.selectedLesson?.videoUrl ?? '',
         height: MediaQuery.sizeOf(context).height * 0.65,
         width: MediaQuery.sizeOf(context).width,
         // height: 300,
@@ -451,17 +467,10 @@ class _LessonsListPageState extends State<LessonsListPage> {
   }
 
   void _switchToLessonPlayMode(LessonModel lessonData) {
-    setState(() {
-      _isLessonPlayMode = true;
-      _selectedLesson = lessonData;
-    });
+    _switchModeCubit.switchToLessonPlayerMode(lessonData);
   }
 
   void _switchToLessonListMode() {
-    setState(() {
-      _isLessonPlayMode = false;
-    });
+    _switchModeCubit.switchToLessonListMode();
   }
 }
-
-
