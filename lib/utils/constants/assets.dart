@@ -10,6 +10,9 @@ abstract class Assets {
   static const successFlushbarIcon = 'assets/svg/success_flushbar_icon.svg';
   static const logoutIcon = 'assets/svg/logout_icon.svg';
   static const lessonCardPlayIcon = 'assets/svg/lesson_card_play_icon.svg';
+  static const playerPlayButton = 'assets/svg/player_play_button.svg';
+  static const playerJumpForward = 'assets/svg/player_jump_forward.svg';
+  static const playerJumpBackward = 'assets/svg/player_jump_backward.svg';
 
   // lottie
   static const loadingDots = 'assets/lottie/loading_dots.json';
