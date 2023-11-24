@@ -5,13 +5,17 @@ import '../../../domain/models/session/session_model.dart';
 import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 
-class LessonsListPage extends StatelessWidget {
+class LessonsListPage extends StatefulWidget {
   LessonsListPage({super.key, required this.sessionData});
 
   final SessionModel sessionData;
 
-  // final _bottomScrollController = ScrollController();
+  @override
+  State<LessonsListPage> createState() => _LessonsListPageState();
+}
 
+class _LessonsListPageState extends State<LessonsListPage> {
+  // final _bottomScrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +59,7 @@ class LessonsListPage extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        '${sessionData.title ?? 'N/A'} ${sessionData.category ?? 'N/A'}',
+                        '${widget.sessionData.title ?? 'N/A'} ${widget.sessionData.category ?? 'N/A'}',
                         style: const TextStyle(
                           color: AppColors.black1,
                           fontSize: 24,
@@ -64,7 +68,7 @@ class LessonsListPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${sessionData.lessons?.length ?? '0'} lesson${sessionData.lessons?.length == 1 ? '' : 's'}',
+                      '${widget.sessionData.lessons?.length ?? '0'} lesson${widget.sessionData.lessons?.length == 1 ? '' : 's'}',
                       style: const TextStyle(
                         color: AppColors.indigo1,
                         fontSize: 12,
@@ -75,12 +79,12 @@ class LessonsListPage extends StatelessWidget {
               ),
             ),
             SliverFillRemaining(
-              child: (sessionData.lessons != null && sessionData.lessons!.isNotEmpty)
+              child: (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty)
                   ? ListView.separated(
                       shrinkWrap: true,
                       padding: const EdgeInsets.only(bottom: 30),
                       itemBuilder: (context, index) {
-                        var lessonData = sessionData.lessons![index];
+                        var lessonData = widget.sessionData.lessons![index];
                         return Container(
                           padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
                           decoration: BoxDecoration(
@@ -134,7 +138,7 @@ class LessonsListPage extends StatelessWidget {
                         );
                       },
                       separatorBuilder: (context, index) => const SizedBox(height: 23),
-                      itemCount: sessionData.lessons!.length,
+                      itemCount: widget.sessionData.lessons!.length,
                     )
                   : const Center(child: Text('No Lessons available')),
             ),
