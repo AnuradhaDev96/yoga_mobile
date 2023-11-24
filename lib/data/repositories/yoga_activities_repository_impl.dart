@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
-import 'package:yoga_app/domain/models/session/session_model.dart';
 
 import '../../domain/helpers/api_client.dart';
+import '../../domain/models/session/session_model.dart';
 import '../../domain/repositories/yoga_activities_repository.dart';
 
 class YogaActivitiesRepositoryImpl extends ApiHelper implements YogaActivitiesRepository {
