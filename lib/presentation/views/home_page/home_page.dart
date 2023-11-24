@@ -11,6 +11,7 @@ import '../../../utils/constants/assets.dart';
 import '../../blocs/authentication_bloc.dart';
 import '../../states/authentication_state.dart';
 import '../../widgets/circular_loader.dart';
+import '../../widgets/list_placeholder.dart';
 import '../lessons_list_page/lessons_list_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -161,6 +162,7 @@ class _HomePageState extends State<HomePage> {
               child: FutureBuilder(
                 future: GetIt.instance<YogaActivitiesRepository>().getSessions(),
                 builder: (context, snapshot) {
+
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Padding(
                       padding: EdgeInsets.only(top: 30),
@@ -172,7 +174,10 @@ class _HomePageState extends State<HomePage> {
                     var listData = snapshot.data;
 
                     if (listData == null || listData.isEmpty) {
-                      return const Center(child: Text('No data available'));
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 30),
+                        child: ListPlaceHolder(placeHolderText: 'No sessions available'),
+                      );
                     } else {
                       List<SessionModel> topSessions = [];
                       if (listData.length >= 3) {
@@ -311,7 +316,10 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   } else {
-                    return const Center(child: Text('No data available'));
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 30),
+                      child: ListPlaceHolder(placeHolderText: 'No sessions available'),
+                    );
                   }
                 },
               ),
