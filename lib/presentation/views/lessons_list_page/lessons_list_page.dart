@@ -17,6 +17,9 @@ class LessonsListPage extends StatefulWidget {
 class _LessonsListPageState extends State<LessonsListPage> {
   bool _isLessonPlayMode = false;
 
+  final _bottomContentHeightFraction = 0.35;
+  final _gradientHeightFraction = 0.3;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +27,23 @@ class _LessonsListPageState extends State<LessonsListPage> {
         alignment: Alignment.topCenter,
         children: [
           Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              width: MediaQuery.sizeOf(context).width,
+              height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.black,
+                    Colors.black.withOpacity(0),
+                  ]
+                )
+              ),
+            ),
+          ),
           Positioned(
             top: 40,
             right: 24,
@@ -54,6 +74,33 @@ class _LessonsListPageState extends State<LessonsListPage> {
               ),
             ),
           ),
+          if (_isLessonPlayMode)
+            const Positioned(
+              bottom: 30,
+              left: 24,
+              right: 24,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Lesson name",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
       bottomSheet: Material(
@@ -71,7 +118,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
           alignment: Alignment.topCenter,
           child: Container(
               height: _isLessonPlayMode
-                  ? MediaQuery.sizeOf(context).height * 0.35
+                  ? MediaQuery.sizeOf(context).height * _bottomContentHeightFraction
                   : MediaQuery.sizeOf(context).height * 0.54,
               width: MediaQuery.sizeOf(context).width,
               decoration: const BoxDecoration(
