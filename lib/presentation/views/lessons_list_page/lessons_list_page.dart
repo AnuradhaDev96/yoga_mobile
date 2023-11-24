@@ -84,7 +84,13 @@ class _LessonsListPageState extends State<LessonsListPage> {
                     child: InkWell(
                       customBorder: const CircleBorder(),
                       radius: 30,
-                      onTap: () => Navigator.pop(context),
+                      onTap: () {
+                        if (_isLessonPlayMode) {
+                          _switchToLessonListMode();
+                        } else {
+                          Navigator.pop(context);
+                        }
+                      },
                       child: SvgPicture.asset(Assets.leftArrowWhite, width: 24, height: 24),
                     ),
                   ),
