@@ -14,6 +14,7 @@ import '../../../utils/extensions/convert_duration_values.dart';
 import '../../states/data_payload_state.dart';
 import '../../widgets/circular_loader.dart';
 import '../../widgets/list_placeholder.dart';
+import 'widgets/lesson_list_view.dart';
 import 'widgets/lesson_player.dart';
 
 class LessonsListPage extends StatefulWidget {
@@ -199,7 +200,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
                           ),
                           child: viewMode is LessonsPlayerMode
                               ? _buildLessonPlayerController(context, playerConfigState)
-                              : _buildLessonList(context)),
+                              : LessonsListView(sessionData: widget.sessionData)),
                     ),
                   ),
                 ),
