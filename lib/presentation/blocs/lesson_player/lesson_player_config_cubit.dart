@@ -27,6 +27,8 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
 
       if (_videoPlayerController!.value.isInitialized) {
         _setChewieController();
+        // var x = chewieController!.videoPlayerController.dataSource;
+        // print("##videSource: $x");
 
         emit(SuccessState());
       } else {
