@@ -8,6 +8,7 @@ import '../../../utils/constants/app_colors.dart';
 import '../../../utils/constants/assets.dart';
 import '../../widgets/circular_loader.dart';
 import '../../widgets/list_placeholder.dart';
+import 'widgets/lesson_player.dart';
 
 class LessonsListPage extends StatefulWidget {
   const LessonsListPage({super.key, required this.sessionData});
@@ -22,7 +23,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
   bool _isLessonPlayMode = false;
   LessonModel? _selectedLesson;
 
-  final _bottomContentHeightFraction = 0.35;
+  final _lessonControllerHeightFraction = 0;//0.35
   final _gradientHeightFraction = 0.3;
 
   @override
@@ -41,25 +42,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
         alignment: Alignment.topCenter,
         children: [
           // Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
-          CachedNetworkImage(
-            height: MediaQuery.sizeOf(context).height * 0.8,
-            fit: BoxFit.fitHeight,
-            imageUrl: widget.sessionData.imageUrl ?? '',
-            placeholder: (_, __) {
-              return Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
-                child: const CircularLoader(),
-              );
-            },
-            errorWidget: (_, __, ___) {
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
-                  child: const Icon(Icons.image, size: 60),
-                ),
-              );
-            },
-          ),
+          _buildLessonPlayer(context),
           Positioned(
             bottom: MediaQuery.sizeOf(context).height * 0.1,
             child: Container(
@@ -164,7 +147,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
           alignment: Alignment.topCenter,
           child: Container(
               height: _isLessonPlayMode
-                  ? MediaQuery.sizeOf(context).height * _bottomContentHeightFraction
+                  ? MediaQuery.sizeOf(context).height * _lessonControllerHeightFraction
                   : MediaQuery.sizeOf(context).height * 0.54,
               width: MediaQuery.sizeOf(context).width,
               decoration: const BoxDecoration(
@@ -174,7 +157,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
                   topLeft: Radius.circular(16),
                 ),
               ),
-              child: _isLessonPlayMode ? _buildLessonPlayer(context) : _buildLessonList(context)),
+              child: _isLessonPlayMode ? _buildLessonPlayerController(context) : _buildLessonList(context)),
         ),
       ),
     );
@@ -298,7 +281,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
     );
   }
 
-  Widget _buildLessonPlayer(BuildContext context) {
+  Widget _buildLessonPlayerController(BuildContext context) {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -328,6 +311,36 @@ class _LessonsListPageState extends State<LessonsListPage> {
         ),
       ],
     );
+  }
+
+  Widget _buildLessonPlayer(BuildContext context) {
+    if (_isLessonPlayMode) {
+      return LessonPlayer(
+        videoUrl: _selectedLesson?.videoUrl ?? '',
+        height: MediaQuery.sizeOf(context).height * 0.8,
+        width: MediaQuery.sizeOf(context).width,
+      );
+    } else {
+      return CachedNetworkImage(
+        height: MediaQuery.sizeOf(context).height * 0.8,
+        fit: BoxFit.fitHeight,
+        imageUrl: widget.sessionData.imageUrl ?? '',
+        placeholder: (_, __) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
+            child: const CircularLoader(),
+          );
+        },
+        errorWidget: (_, __, ___) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.2),
+              child: const Icon(Icons.image, size: 60),
+            ),
+          );
+        },
+      );
+    }
   }
 
   void _switchToLessonPlayMode(LessonModel lessonData) {

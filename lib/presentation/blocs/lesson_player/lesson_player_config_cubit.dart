@@ -1,4 +1,5 @@
 import 'package:chewie/chewie.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 
@@ -41,7 +42,7 @@ class LessonPlayerConfigCubit extends Cubit<DataPayloadState> {
       videoPlayerController: _videoPlayerController!,
       aspectRatio: _videoPlayerController!.value.aspectRatio,
       materialProgressColors: ChewieProgressColors(
-        backgroundColor: AppColors.grey4,
+        backgroundColor: Colors.amber,
         handleColor: AppColors.indigo1,
         playedColor: AppColors.indigo1.withOpacity(0.8),
         bufferedColor: AppColors.indigo1.withOpacity(0.25),
