@@ -304,81 +304,85 @@ class _LessonsListPageState extends State<LessonsListPage> {
   }
 
   Widget _buildLessonPlayerController(BuildContext context, DataPayloadState state) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 12),
-            child: Center(
-              child: Container(
-                width: 48,
-                height: 5,
-                decoration: BoxDecoration(color: AppColors.grey4, borderRadius: BorderRadius.circular(100)),
+    try {
+      return CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 12),
+              child: Center(
+                child: Container(
+                  width: 48,
+                  height: 5,
+                  decoration: BoxDecoration(color: AppColors.grey4, borderRadius: BorderRadius.circular(100)),
+                ),
               ),
             ),
           ),
-        ),
-        (state is SuccessState)
-            ? Builder(
-                builder: (context) {
-                  if (_lessonPlayerConfigCubit.isVideoControllerInitialized) {
-                    return SliverToBoxAdapter(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              _lessonPlayerConfigCubit.jumpBackward();
-                            },
-                            icon: SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (_lessonPlayerConfigCubit.isVideoControllerInitialized &&
-                                  _lessonPlayerConfigCubit.chewieController!.isPlaying) {
-                                _lessonPlayerConfigCubit.pausePlay();
-                              } else {
-                                _lessonPlayerConfigCubit.resumePlay();
-                              }
-                            },
-                            child: ValueListenableBuilder(
-                                valueListenable: _lessonPlayerConfigCubit.chewieController!.videoPlayerController,
-                                builder: (context, videoController, _) {
-                                  return videoController.isPlaying
-                                      ? SvgPicture.asset(
-                                          Assets.playerPauseButton,
-                                          width: 58,
-                                          height: 58,
-                                        )
-                                      : SvgPicture.asset(
-                                          Assets.playerPlayButton,
-                                          width: 58,
-                                          height: 58,
-                                        );
-                                }),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              _lessonPlayerConfigCubit.jumpForward();
-                            },
-                            icon: SvgPicture.asset(Assets.playerJumpForward, width: 26, height: 26),
-                          ),
-                        ],
+          (state is SuccessState)
+              ? Builder(
+            builder: (context) {
+              if (_lessonPlayerConfigCubit.isVideoControllerInitialized) {
+                return SliverToBoxAdapter(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _lessonPlayerConfigCubit.jumpBackward();
+                        },
+                        icon: SvgPicture.asset(Assets.playerJumpBackward, width: 26, height: 26),
                       ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              )
-            : const SliverFillRemaining(
-                child: ListPlaceHolder(
-                  errorType: DataErrorEnum.controllerError,
-                  placeHolderText: 'Video controls are disabled',
-                ),
-              ),
-      ],
-    );
+                      GestureDetector(
+                        onTap: () {
+                          if (_lessonPlayerConfigCubit.isVideoControllerInitialized &&
+                              _lessonPlayerConfigCubit.chewieController!.isPlaying) {
+                            _lessonPlayerConfigCubit.pausePlay();
+                          } else {
+                            _lessonPlayerConfigCubit.resumePlay();
+                          }
+                        },
+                        child: ValueListenableBuilder(
+                            valueListenable: _lessonPlayerConfigCubit.chewieController!.videoPlayerController,
+                            builder: (context, videoController, _) {
+                              return videoController.isPlaying
+                                  ? SvgPicture.asset(
+                                Assets.playerPauseButton,
+                                width: 58,
+                                height: 58,
+                              )
+                                  : SvgPicture.asset(
+                                Assets.playerPlayButton,
+                                width: 58,
+                                height: 58,
+                              );
+                            }),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _lessonPlayerConfigCubit.jumpForward();
+                        },
+                        icon: SvgPicture.asset(Assets.playerJumpForward, width: 26, height: 26),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          )
+              : SliverFillRemaining(
+            child: ListPlaceHolder(
+              errorType: DataErrorEnum.controllerError,
+              placeHolderText: state is ErrorState ? 'Video controls are disabled' : 'Waiting for video file',
+            ),
+          ),
+        ],
+      );
+    } catch (e) {
+      return const SizedBox.shrink();
+    }
   }
 
   Widget _buildLessonPlayer(BuildContext context) {
