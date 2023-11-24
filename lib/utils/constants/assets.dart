@@ -12,9 +12,12 @@ abstract class Assets {
   static const logoutIcon = 'assets/svg/logout_icon.svg';
   static const lessonCardPlayIcon = 'assets/svg/lesson_card_play_icon.svg';
   static const playerPlayButton = 'assets/svg/player_play_button.svg';
+  static const playerPauseButton = 'assets/svg/player_pause_button.svg';
   static const playerJumpForward = 'assets/svg/player_jump_forward.svg';
   static const playerJumpBackward = 'assets/svg/player_jump_backward.svg';
   static const emptyListIcon = 'assets/svg/empty_list_icon.svg';
+  static const videoErrorIcon = 'assets/svg/video_error_icon.svg';
+  static const videoControllerIcon = 'assets/svg/video_controller_icon.svg';
 
   // lottie
   static const loadingDots = 'assets/lottie/loading_dots.json';

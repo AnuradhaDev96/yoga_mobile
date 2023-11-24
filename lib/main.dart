@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'config/themes/default_text_styles.dart';
+import 'config/utility/route_observers.dart';
 import 'dependency_injector.dart';
 import 'presentation/blocs/alert_cubit.dart';
 import 'presentation/blocs/authentication_bloc.dart';
@@ -32,6 +33,7 @@ class KeepYogaApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.indigo1),
           useMaterial3: true,
         ),
+        navigatorObservers: [primaryStudentRouteObserver],
         home: BlocListener<AlertCubit, AlertState>(
           listener: (context, state) {
             // show alert message when state is true
