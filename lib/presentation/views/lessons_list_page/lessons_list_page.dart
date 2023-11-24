@@ -59,7 +59,6 @@ class _LessonsListPageState extends State<LessonsListPage> {
               body: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  // Image.asset('assets/png/temp_image.png', width: MediaQuery.sizeOf(context).width, fit: BoxFit.fitWidth),
                   _buildLessonPlayer(context),
                   Positioned(
                     bottom: (state is SuccessState) ? -10 : MediaQuery.sizeOf(context).height * 0.2,
