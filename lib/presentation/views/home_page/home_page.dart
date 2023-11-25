@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                                         Text(
                                           '${sessionData.lessons?.length ?? '0'} lesson${sessionData.lessons?.length == 1 ? '' : 's'}',
                                           style: TextStyle(
-                                            color: const Color(0xFF2B2B2B).withOpacity(0.70),
+                                            color: AppColors.black2.withOpacity(0.70),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                           ),
@@ -293,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                                             Text(
                                               '4.5',
                                               style: TextStyle(
-                                                color: const Color(0xFF2B2B2B).withOpacity(0.7),
+                                                color: AppColors.black2.withOpacity(0.7),
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 10,
                                               ),

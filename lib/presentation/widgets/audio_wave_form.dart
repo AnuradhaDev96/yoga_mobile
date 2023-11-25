@@ -34,7 +34,7 @@ class AudioWaveForm extends StatefulWidget {
       this.height = 100,
       // this.width = 200,
       this.spacing = 5,
-        this.thickness = 2,
+      this.thickness = 2,
       this.alignment = 'center',
       this.animation = true,
       this.animationLoop = 0,

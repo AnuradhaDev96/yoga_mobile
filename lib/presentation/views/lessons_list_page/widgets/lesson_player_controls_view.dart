@@ -92,19 +92,13 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                               int noOfElements = (durationInMilliSeconds / 500).ceil();
 
                                               return SizedBox(
-                                                width: 260,
                                                 height: 80,
                                                 child: ListView(
                                                   scrollDirection: Axis.horizontal,
                                                   shrinkWrap: true,
                                                   physics: const BouncingScrollPhysics(),
                                                   children: [
-                                                    AudioVisualizer(
-                                                      listOfBars: List.generate(
-                                                        noOfElements,
-                                                        (index) => WaveBar(heightFactor: index.toAudioWaveHeightFactor, color: Colors.black),
-                                                      ),
-                                                    ),
+                                                    AudioVisualizer(barCount: noOfElements),
                                                   ],
                                                 ),
                                               );
@@ -180,22 +174,42 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
 }
 
 class AudioVisualizer extends StatelessWidget {
-  const AudioVisualizer({super.key, required this.listOfBars});
+  const AudioVisualizer({super.key, required this.barCount});
 
-  final List<WaveBar> listOfBars;
+  // final List<WaveBar> listOfBars;
+  final int barCount;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 9),
-      child: AudioWaveForm(
-        height: 60,
-        // width: 260,
-        spacing: 2.0,
-        // alignment: 'top',
-        animationLoop: 1,
-        beatRate: const Duration(milliseconds: 200),
-        bars: listOfBars,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AudioWaveForm(
+            height: 60,
+            spacing: 2.0,
+            animationLoop: 1,
+            beatRate: const Duration(milliseconds: 200),
+            bars: List.generate(
+              barCount,
+              (index) => WaveBar(heightFactor: index.toAudioWaveHeightFactor, color: AppColors.black2),
+            ),
+          ),
+          // Align(
+          //   alignment: Alignment.centerLeft,
+          //   child: AudioWaveForm(
+          //     height: 60,
+          //     spacing: 2.0,
+          //     animationLoop: 1,
+          //     beatRate: const Duration(milliseconds: 500),
+          //     bars: List.generate(
+          //       barCount,
+          //       (index) => WaveBar(heightFactor: index.toAudioWaveHeightFactor, color: AppColors.indigo1),
+          //     ),
+          //   ),
+          // ),
+        ],
       ),
     );
   }

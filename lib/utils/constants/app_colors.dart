@@ -4,6 +4,7 @@ abstract class AppColors {
   static const indigo1 = Color(0xFF6B4EFF);
 
   static const black1 = Color(0xFF090A0A);
+  static const black2 = Color(0xFF2B2B2B);
 
   static const grey1 = Color(0xFFDAE2EB);
   static const grey2 = Color(0xFF72777A);
