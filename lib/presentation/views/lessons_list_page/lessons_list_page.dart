@@ -75,20 +75,24 @@ class _LessonsListPageState extends State<LessonsListPage> {
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onDoubleTap: () => _enterFullScreen(),
-                            onVerticalDragEnd: (dragDetails) => _enterFullScreen(),
+                            onVerticalDragEnd: (dragDetails) {
+                              if (_isReadMore) {
+                                return;
+                              }
+                              _enterFullScreen();
+                            },
                             child: Container(
                               width: MediaQuery.sizeOf(context).width,
                               height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                // gradient: LinearGradient(
-                                //   begin: Alignment.bottomCenter,
-                                //   end: Alignment.topCenter,
-                                //   colors: [
-                                //     Colors.black,
-                                //     Colors.black.withOpacity(0),
-                                //   ],
-                                // ),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.black,
+                                    Colors.black.withOpacity(0),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -149,7 +153,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
                             child: GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onDoubleTap: () => _enterFullScreen(),
-                              onVerticalDragEnd: (dragDetails) => _enterFullScreen(),
+                              onVerticalDragEnd: (dragDetails) {},
                               onTap: () {
                                 setState(() {
                                   _isReadMore = !_isReadMore;
@@ -167,15 +171,24 @@ class _LessonsListPageState extends State<LessonsListPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Wrap(
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        _switchModeCubit.selectedLesson?.description ?? 'N/A',
-                                        maxLines: _isReadMore ? null : 3,
-                                        overflow: _isReadMore ? null : TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 13,
+                                      SizedBox(
+                                        width: MediaQuery.sizeOf(context).width,
+                                        height: _isReadMore ? 120 : null,
+                                        child: SingleChildScrollView(
+                                          physics: const BouncingScrollPhysics(),
+                                          child: Text(
+                                            _switchModeCubit.selectedLesson?.description ?? 'N/A',
+                                            maxLines: _isReadMore ? null : 3,
+                                            overflow: _isReadMore ? null : TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 13,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       Text(
