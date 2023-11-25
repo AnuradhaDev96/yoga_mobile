@@ -64,55 +64,62 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                 builder: (context, videoController, _) {
                                   return Column(
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            videoController.position.inMinutesAndSeconds,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black,
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              videoController.position.inMinutesAndSeconds,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black,
+                                              ),
                                             ),
-                                          ),
-                                          // Flexible(
-                                          //   child: RectangleWaveform(
-                                          //     // samples: const [ 0,2,34,352,5,],
-                                          //     samples: [],
-                                          //     height: 62,
-                                          //     width: 400,
-                                          //     maxDuration: videoController.duration,
-                                          //     elapsedDuration: videoController.position,
-                                          //   ),
-                                          // ),
-                                          Builder(
-                                            builder: (context) {
-                                              var durationInMilliSeconds = _lessonPlayerConfigCubit.chewieController!
-                                                  .videoPlayerController.value.duration.inMilliseconds;
-                                              int noOfElements = (durationInMilliSeconds / timeGap).ceil();
+                                            // Flexible(
+                                            //   child: RectangleWaveform(
+                                            //     // samples: const [ 0,2,34,352,5,],
+                                            //     samples: [],
+                                            //     height: 62,
+                                            //     width: 400,
+                                            //     maxDuration: videoController.duration,
+                                            //     elapsedDuration: videoController.position,
+                                            //   ),
+                                            // ),
+                                            Builder(
+                                              builder: (context) {
+                                                var durationInMilliSeconds = _lessonPlayerConfigCubit.chewieController!
+                                                    .videoPlayerController.value.duration.inMilliseconds;
+                                                int noOfElements = (durationInMilliSeconds / timeGap).ceil();
 
-                                              return SizedBox(
-                                                height: 80,
-                                                child: ListView(
-                                                  scrollDirection: Axis.horizontal,
-                                                  shrinkWrap: true,
-                                                  physics: const BouncingScrollPhysics(),
-                                                  children: [
-                                                    AudioVisualizer(barCount: noOfElements),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          Text(
-                                            videoController.duration.inMinutesAndSeconds,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black,
+                                                return Flexible(
+                                                  child: Container(
+                                                    height: 80,
+                                                    margin: const EdgeInsets.symmetric(horizontal:5),
+                                                    child: ListView(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                      scrollDirection: Axis.horizontal,
+                                                      shrinkWrap: true,
+                                                      physics: const BouncingScrollPhysics(),
+                                                      children: [
+                                                        AudioVisualizer(barCount: noOfElements),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
-                                          ),
-                                        ],
+                                            Text(
+                                              videoController.duration.inMinutesAndSeconds,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -184,42 +191,49 @@ class AudioVisualizer extends StatefulWidget {
 }
 
 class _AudioVisualizerState extends State<AudioVisualizer> {
+  late final LessonPlayerConfigCubit _lessonPlayerConfigCubit;
 
+  @override
+  void initState() {
+    super.initState();
+    _lessonPlayerConfigCubit = BlocProvider.of<LessonPlayerConfigCubit>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 9),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AudioWaveForm(
-            height: 60,
-            spacing: 2.0,
-            animationLoop: 1,
-            beatRate: const Duration(milliseconds: 200),
-            bars: List.generate(
-              widget.barCount,
-              (index) => WaveBar(heightFactor: index.toAudioWaveHeightFactor, color: AppColors.black2),
-            ),
+    return ValueListenableBuilder(
+      valueListenable: _lessonPlayerConfigCubit.chewieController!.videoPlayerController,
+      builder: (context, videoPlayerController, _) {
+        // bar at index of the current duration should be painted
+
+        int currentPosition = videoPlayerController.position.inMilliseconds;
+
+        int currentBarPosition = (currentPosition / timeGap).floor();
+
+        return AudioWaveForm(
+          height: 60,
+          spacing: 2.0,
+          animationLoop: 1,
+          beatRate: const Duration(milliseconds: 45),
+          bars: List.generate(
+            widget.barCount,
+            (index) {
+              bool shouldHighlight = false;
+
+              if (currentBarPosition > 0 && (currentBarPosition - 1) >= index) {
+                shouldHighlight = true;
+              }
+
+              return WaveBar(
+                heightFactor: index.toAudioWaveHeightFactor,
+                color: shouldHighlight ? AppColors.indigo1 : AppColors.black2,
+              );
+            },
           ),
-          // Align(
-          //   alignment: Alignment.centerLeft,
-          //   child: AudioWaveForm(
-          //     height: 60,
-          //     spacing: 2.0,
-          //     animationLoop: 1,
-          //     beatRate: const Duration(milliseconds: 500),
-          //     bars: List.generate(
-          //       barCount,
-          //       (index) => WaveBar(heightFactor: index.toAudioWaveHeightFactor, color: AppColors.indigo1),
-          //     ),
-          //   ),
-          // ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-int timeGap = 500;
+int timeGap = 200;
