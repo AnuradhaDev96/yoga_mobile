@@ -65,7 +65,7 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                   return Column(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                                        padding: const EdgeInsets.only(left: 24, right: 24, bottom: 14, top: 10),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
@@ -77,16 +77,6 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                                 color: Colors.black,
                                               ),
                                             ),
-                                            // Flexible(
-                                            //   child: RectangleWaveform(
-                                            //     // samples: const [ 0,2,34,352,5,],
-                                            //     samples: [],
-                                            //     height: 62,
-                                            //     width: 400,
-                                            //     maxDuration: videoController.duration,
-                                            //     elapsedDuration: videoController.position,
-                                            //   ),
-                                            // ),
                                             Builder(
                                               builder: (context) {
                                                 var durationInMilliSeconds = _lessonPlayerConfigCubit.chewieController!
@@ -205,9 +195,7 @@ class _AudioVisualizerState extends State<AudioVisualizer> {
       valueListenable: _lessonPlayerConfigCubit.chewieController!.videoPlayerController,
       builder: (context, videoPlayerController, _) {
         // bar at index of the current duration should be painted
-
         int currentPosition = videoPlayerController.position.inMilliseconds;
-
         int currentBarPosition = (currentPosition / timeGap).floor();
 
         return AudioWaveForm(
