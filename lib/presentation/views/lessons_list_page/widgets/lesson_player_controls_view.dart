@@ -89,7 +89,7 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                             builder: (context) {
                                               var durationInMilliSeconds = _lessonPlayerConfigCubit.chewieController!
                                                   .videoPlayerController.value.duration.inMilliseconds;
-                                              int noOfElements = (durationInMilliSeconds / 500).ceil();
+                                              int noOfElements = (durationInMilliSeconds / timeGap).ceil();
 
                                               return SizedBox(
                                                 height: 80,
@@ -173,11 +173,18 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
   }
 }
 
-class AudioVisualizer extends StatelessWidget {
+class AudioVisualizer extends StatefulWidget {
   const AudioVisualizer({super.key, required this.barCount});
 
   // final List<WaveBar> listOfBars;
   final int barCount;
+
+  @override
+  State<AudioVisualizer> createState() => _AudioVisualizerState();
+}
+
+class _AudioVisualizerState extends State<AudioVisualizer> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +199,7 @@ class AudioVisualizer extends StatelessWidget {
             animationLoop: 1,
             beatRate: const Duration(milliseconds: 200),
             bars: List.generate(
-              barCount,
+              widget.barCount,
               (index) => WaveBar(heightFactor: index.toAudioWaveHeightFactor, color: AppColors.black2),
             ),
           ),
@@ -214,3 +221,5 @@ class AudioVisualizer extends StatelessWidget {
     );
   }
 }
+
+int timeGap = 500;
