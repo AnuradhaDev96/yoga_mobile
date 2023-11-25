@@ -44,7 +44,6 @@ dependencies:
   lottie: ^2.7.0
   shared_preferences: ^2.2.2
   video_player: ^2.8.1
-  general_audio_waveforms: ^0.0.10
 
 dev_dependencies:
   flutter_test:

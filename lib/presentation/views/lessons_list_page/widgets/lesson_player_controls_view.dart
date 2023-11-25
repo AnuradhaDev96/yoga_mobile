@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_waveforms/flutter_audio_waveforms.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -9,6 +8,7 @@ import '../../../../utils/constants/assets.dart';
 import '../../../../utils/extensions/convert_duration_values.dart';
 import '../../../blocs/lesson_player/lesson_player_config_cubit.dart';
 import '../../../states/data_payload_state.dart';
+import '../../../widgets/audio_wave_form.dart';
 import '../../../widgets/list_placeholder.dart';
 
 class LessonPlayerControlsView extends StatefulWidget {
@@ -20,6 +20,7 @@ class LessonPlayerControlsView extends StatefulWidget {
 
 class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
   late final LessonPlayerConfigCubit _lessonPlayerConfigCubit;
+  Duration elapsedValue = Duration.zero;
 
   @override
   void initState() {
@@ -73,15 +74,40 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          Flexible(
-                                            child: RectangleWaveform(
-                                              // samples: const [ 0,2,34,352,5,],
-                                              samples: [],
-                                              height: 62,
-                                              width: 400,
-                                              maxDuration: videoController.duration,
-                                              elapsedDuration: videoController.position,
-                                            ),
+                                          // Flexible(
+                                          //   child: RectangleWaveform(
+                                          //     // samples: const [ 0,2,34,352,5,],
+                                          //     samples: [],
+                                          //     height: 62,
+                                          //     width: 400,
+                                          //     maxDuration: videoController.duration,
+                                          //     elapsedDuration: videoController.position,
+                                          //   ),
+                                          // ),
+                                          Builder(
+                                            builder: (context) {
+                                              var durationInMilliSeconds = _lessonPlayerConfigCubit.chewieController!
+                                                  .videoPlayerController.value.duration.inMilliseconds;
+                                              int noOfElements = (durationInMilliSeconds / 500).ceil();
+
+                                              return SizedBox(
+                                                width: 260,
+                                                height: 80,
+                                                child: ListView(
+                                                  scrollDirection: Axis.horizontal,
+                                                  shrinkWrap: true,
+                                                  physics: const BouncingScrollPhysics(),
+                                                  children: [
+                                                    AudioVisualizer(
+                                                      listOfBars: List.generate(
+                                                        noOfElements,
+                                                        (index) => WaveBar(heightFactor: 0.4, color: Colors.black),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
                                           Text(
                                             videoController.duration.inMinutesAndSeconds,
@@ -149,5 +175,27 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
             ],
           );
         });
+  }
+}
+
+class AudioVisualizer extends StatelessWidget {
+  const AudioVisualizer({super.key, required this.listOfBars});
+
+  final List<WaveBar> listOfBars;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 9),
+      child: AudioWaveForm(
+        height: 60,
+        // width: 260,
+        spacing: 2.0,
+        // alignment: 'top',
+        animationLoop: 1,
+        beatRate: const Duration(milliseconds: 200),
+        bars: listOfBars,
+      ),
+    );
   }
 }
