@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> {
         onRefresh: () async {
           setState(() {});
         },
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
         color: AppColors.grey2,
         child: CustomScrollView(
           controller: _controller,
@@ -258,12 +259,15 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          sessionData.title ?? 'N/A',
-                                          style: const TextStyle(
-                                            color: Color(0xFF161719),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
+                                        SizedBox(
+                                          width: MediaQuery.sizeOf(context).width * 0.5,
+                                          child: Text(
+                                            sessionData.title ?? 'N/A',
+                                            style: const TextStyle(
+                                              color: Color(0xFF161719),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(height: 8),
