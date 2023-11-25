@@ -10,6 +10,7 @@ import '../../../blocs/lesson_player/lesson_player_config_cubit.dart';
 import '../../../states/data_payload_state.dart';
 import '../../../widgets/audio_wave_form.dart';
 import '../../../widgets/list_placeholder.dart';
+import '../../../../utils/extensions/numeric_dimensions.dart';
 
 class LessonPlayerControlsView extends StatefulWidget {
   const LessonPlayerControlsView({super.key});
@@ -101,7 +102,7 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                                     AudioVisualizer(
                                                       listOfBars: List.generate(
                                                         noOfElements,
-                                                        (index) => WaveBar(heightFactor: 0.4, color: Colors.black),
+                                                        (index) => WaveBar(heightFactor: index.toAudioWaveHeightFactor, color: Colors.black),
                                                       ),
                                                     ),
                                                   ],
