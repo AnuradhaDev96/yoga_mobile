@@ -25,6 +25,8 @@ class _LessonsListPageState extends State<LessonsListPage> {
   final _lessonPlayerConfigCubit = LessonPlayerConfigCubit();
   final _switchModeCubit = SwitchLessonModeCubit();
 
+  bool _isReadMore = false;
+
   final _lessonControllerHeightFraction = 0.35; //0.35
   final _gradientHeightFraction = 0.3;
 
@@ -77,15 +79,16 @@ class _LessonsListPageState extends State<LessonsListPage> {
                             child: Container(
                               width: MediaQuery.sizeOf(context).width,
                               height: MediaQuery.sizeOf(context).height * _gradientHeightFraction,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    Colors.black,
-                                    Colors.black.withOpacity(0),
-                                  ],
-                                ),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                // gradient: LinearGradient(
+                                //   begin: Alignment.bottomCenter,
+                                //   end: Alignment.topCenter,
+                                //   colors: [
+                                //     Colors.black,
+                                //     Colors.black.withOpacity(0),
+                                //   ],
+                                // ),
                               ),
                             ),
                           ),
@@ -137,7 +140,7 @@ class _LessonsListPageState extends State<LessonsListPage> {
                           ),
                         ),
                         Positioned(
-                          bottom: (playerConfigState is SuccessState) ? 10 : MediaQuery.sizeOf(context).height * 0.38,
+                          bottom: (playerConfigState is SuccessState) ? 12 : MediaQuery.sizeOf(context).height * 0.38,
                           left: 24,
                           right: 24,
                           child: AnimatedOpacity(
@@ -147,6 +150,11 @@ class _LessonsListPageState extends State<LessonsListPage> {
                               behavior: HitTestBehavior.opaque,
                               onDoubleTap: () => _enterFullScreen(),
                               onVerticalDragEnd: (dragDetails) => _enterFullScreen(),
+                              onTap: () {
+                                setState(() {
+                                  _isReadMore = !_isReadMore;
+                                });
+                              },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,12 +167,26 @@ class _LessonsListPageState extends State<LessonsListPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text(
-                                    _switchModeCubit.selectedLesson?.description ?? 'N/A',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                    ),
+                                  Wrap(
+                                    children: [
+                                      Text(
+                                        _switchModeCubit.selectedLesson?.description ?? 'N/A',
+                                        maxLines: _isReadMore ? null : 3,
+                                        overflow: _isReadMore ? null : TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      Text(
+                                        _isReadMore ? 'Read less' : 'Read more',
+                                        style: const TextStyle(
+                                            letterSpacing: 1.1,
+                                            color: Colors.white,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
