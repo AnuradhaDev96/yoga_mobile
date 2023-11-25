@@ -152,24 +152,29 @@ class SessionsListByCategoryPage extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'By ${sessionData.instructor ?? 'N/A'}',
-                                      style: const TextStyle(
-                                        color: Color(0xFFAAAAAA),
-                                        fontSize: 10,
+                                SizedBox(
+                                  width: MediaQuery.sizeOf(context).width * 0.55,
+                                  child: Wrap(
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    runAlignment: WrapAlignment.center,
+                                    children: [
+                                      Text(
+                                        'By ${sessionData.instructor ?? 'N/A'}',
+                                        style: const TextStyle(
+                                          color: Color(0xFFAAAAAA),
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                    _roundedSeparator,
-                                    Text(
-                                      sessionData.category ?? 'N/A',
-                                      style: const TextStyle(
-                                        color: Color(0xFFAAAAAA),
-                                        fontSize: 10,
+                                      _roundedSeparator,
+                                      Text(
+                                        sessionData.category ?? 'N/A',
+                                        style: const TextStyle(
+                                          color: Color(0xFFAAAAAA),
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 )
                               ],
                             ),

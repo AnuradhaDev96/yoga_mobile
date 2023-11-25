@@ -280,39 +280,44 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         const SizedBox(height: 8),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'By ${sessionData.instructor ?? 'N/A'}',
-                                              style: GoogleFonts.dmSans(
-                                                color: const Color(0xFFAAAAAA),
-                                                fontSize: 10,
+                                        SizedBox(
+                                          width: MediaQuery.sizeOf(context).width * 0.55,
+                                          child: Wrap(
+                                            crossAxisAlignment: WrapCrossAlignment.center,
+                                            runAlignment: WrapAlignment.center,
+                                            children: [
+                                              Text(
+                                                'By ${sessionData.instructor ?? 'N/A'}',
+                                                style: GoogleFonts.dmSans(
+                                                  color: const Color(0xFFAAAAAA),
+                                                  fontSize: 10,
+                                                ),
                                               ),
-                                            ),
-                                            _roundedSeparator,
-                                            Text(
-                                              sessionData.category ?? 'N/A',
-                                              style: GoogleFonts.dmSans(
-                                                color: const Color(0xFFAAAAAA),
-                                                fontSize: 10,
+                                              _roundedSeparator,
+                                              Text(
+                                                sessionData.category ?? 'N/A',
+                                                style: GoogleFonts.dmSans(
+                                                  color: const Color(0xFFAAAAAA),
+                                                  fontSize: 10,
+                                                ),
                                               ),
-                                            ),
-                                            _roundedSeparator,
-                                            const Icon(
-                                              Icons.star_rounded,
-                                              size: 16,
-                                              color: Color(0xFFFFC960),
-                                            ),
-                                            const SizedBox(width: 6.08),
-                                            Text(
-                                              '4.5',
-                                              style: GoogleFonts.roboto(
-                                                color: AppColors.black2.withOpacity(0.7),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
+                                              _roundedSeparator,
+                                              const Icon(
+                                                Icons.star_rounded,
+                                                size: 16,
+                                                color: Color(0xFFFFC960),
                                               ),
-                                            ),
-                                          ],
+                                              const SizedBox(width: 6.08),
+                                              Text(
+                                                '4.5',
+                                                style: GoogleFonts.roboto(
+                                                  color: AppColors.black2.withOpacity(0.7),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         )
                                       ],
                                     ),
