@@ -27,3 +27,8 @@ Package name: anuradha
   - Hips
 
 - Lesson list sorted by title
+
+#### Release
+- APK release is Signed
+- APK is a fat APK (Did not executed --split-per-abi)
+- Use App Center to download and install the APK
