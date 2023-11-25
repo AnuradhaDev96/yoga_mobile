@@ -222,7 +222,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           create: (context) => _createAccountCubit,
           child: BlocListener<CreateAccountCubit, DataPayloadState>(
             bloc: _createAccountCubit,
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is ErrorState) {
                 // show error message on login error
                 MessageUtils.showSnackBarOverBarrier(context, state.errorMessage, isErrorMessage: true);
@@ -230,7 +230,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 // Replace route to login page after creating account
                 _resetFields();
                 MessageUtils.showSnackBarOverBarrier(context, 'User registered successfully');
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+
+                await Future.delayed(const Duration(milliseconds: 800), () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                });
               }
             },
             child: BlocBuilder<CreateAccountCubit, DataPayloadState>(

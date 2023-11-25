@@ -25,3 +25,5 @@ Package name: anuradha
   - Upper Body
   - Lower Body
   - Hips
+
+- Lesson list sorted by title

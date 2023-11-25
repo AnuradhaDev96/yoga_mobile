@@ -13,8 +13,6 @@ class LessonsListView extends StatefulWidget {
 
   final SessionModel sessionData;
 
-  // final Function toggleFunction;
-
   @override
   State<LessonsListView> createState() => _LessonsListViewState();
 }
@@ -81,69 +79,75 @@ class _LessonsListViewState extends State<LessonsListView> {
         ),
         SliverFillRemaining(
           child: (widget.sessionData.lessons != null && widget.sessionData.lessons!.isNotEmpty)
-              ? ListView.separated(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.only(bottom: 30),
-                  itemBuilder: (context, index) {
-                    var lessonData = widget.sessionData.lessons![index];
+              ? Builder(
+                  builder: (context) {
+                    widget.sessionData.lessons!.sort((a, b) => (a.title ?? "").compareTo((b.title ?? "")));
 
-                    return GestureDetector(
-                      onTap: () => _switchLessonModeCubit.switchToLessonPlayerMode(lessonData),
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
-                              offset: const Offset(0, 3),
-                              spreadRadius: 0,
-                              blurRadius: 10,
-                            )
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(bottom: 30),
+                      itemBuilder: (context, index) {
+                        var lessonData = widget.sessionData.lessons![index];
+
+                        return GestureDetector(
+                          onTap: () => _switchLessonModeCubit.switchToLessonPlayerMode(lessonData),
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(24, 12, 21, 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  offset: const Offset(0, 3),
+                                  spreadRadius: 0,
+                                  blurRadius: 10,
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Image.asset(Assets.lessonAvatar, width: 40, height: 40),
-                                const SizedBox(width: 12),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Row(
                                   children: [
-                                    Text(
-                                      lessonData.title ?? 'N/A',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: AppColors.black1,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.sizeOf(context).width * 0.6,
-                                      child: Text(
-                                        lessonData.description ?? 'N/A',
-                                        overflow: TextOverflow.clip,
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          color: Color(0xFF7B7F82),
+                                    Image.asset(Assets.lessonAvatar, width: 40, height: 40),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          lessonData.title ?? 'N/A',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: AppColors.black1,
+                                          ),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          width: MediaQuery.sizeOf(context).width * 0.6,
+                                          child: Text(
+                                            lessonData.description ?? 'N/A',
+                                            overflow: TextOverflow.clip,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Color(0xFF7B7F82),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
+                                SvgPicture.asset(Assets.lessonCardPlayIcon, width: 27, height: 27),
                               ],
                             ),
-                            SvgPicture.asset(Assets.lessonCardPlayIcon, width: 27, height: 27),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(height: 23),
+                      itemCount: widget.sessionData.lessons!.length,
                     );
                   },
-                  separatorBuilder: (context, index) => const SizedBox(height: 23),
-                  itemCount: widget.sessionData.lessons!.length,
                 )
               : const ListPlaceHolder(placeHolderText: 'No lessons available'),
         ),

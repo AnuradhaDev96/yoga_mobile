@@ -131,12 +131,15 @@ class SessionsListByCategoryPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  sessionData.title ?? 'N/A',
-                                  style: const TextStyle(
-                                    color: Color(0xFF161719),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                SizedBox(
+                                  width: MediaQuery.sizeOf(context).width * 0.5,
+                                  child: Text(
+                                    sessionData.title ?? 'N/A',
+                                    style: const TextStyle(
+                                      color: Color(0xFF161719),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -149,24 +152,29 @@ class SessionsListByCategoryPage extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'By ${sessionData.instructor ?? 'N/A'}',
-                                      style: const TextStyle(
-                                        color: Color(0xFFAAAAAA),
-                                        fontSize: 10,
+                                SizedBox(
+                                  width: MediaQuery.sizeOf(context).width * 0.55,
+                                  child: Wrap(
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    runAlignment: WrapAlignment.center,
+                                    children: [
+                                      Text(
+                                        'By ${sessionData.instructor ?? 'N/A'}',
+                                        style: const TextStyle(
+                                          color: Color(0xFFAAAAAA),
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                    _roundedSeparator,
-                                    Text(
-                                      sessionData.category ?? 'N/A',
-                                      style: const TextStyle(
-                                        color: Color(0xFFAAAAAA),
-                                        fontSize: 10,
+                                      _roundedSeparator,
+                                      Text(
+                                        sessionData.category ?? 'N/A',
+                                        style: const TextStyle(
+                                          color: Color(0xFFAAAAAA),
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
