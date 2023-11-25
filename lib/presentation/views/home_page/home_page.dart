@@ -158,30 +158,33 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SliverFillRemaining(
-              child: FutureBuilder(
-                future: GetIt.instance<YogaActivitiesRepository>().getSessions(),
-                builder: (context, snapshot) {
+            FutureBuilder(
+              future: GetIt.instance<YogaActivitiesRepository>().getSessions(),
+              builder: (context, snapshot) {
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularLoader();
-                  }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SliverFillRemaining(child: CircularLoader());
+                }
 
-                  if (snapshot.hasData) {
-                    var listData = snapshot.data;
+                if (snapshot.hasData) {
+                  var listData = snapshot.data;
 
-                    if (listData == null || listData.isEmpty) {
-                      return const ListPlaceHolder(placeHolderText: 'No sessions available');
+                  if (listData == null || listData.isEmpty) {
+                    return const SliverFillRemaining(
+                      child: ListPlaceHolder(placeHolderText: 'No sessions available'),
+                    );
+                  } else {
+                    List<SessionModel> topSessions = [];
+                    if (listData.length >= 3) {
+                      topSessions.addAll(listData.sublist(0, 3));
                     } else {
-                      List<SessionModel> topSessions = [];
-                      if (listData.length >= 3) {
-                        topSessions.addAll(listData.sublist(0, 3));
-                      } else {
-                        topSessions.addAll(listData);
-                      }
+                      topSessions.addAll(listData);
+                    }
 
-                      return ListView.separated(
+                    return SliverToBoxAdapter(
+                      child: ListView.separated(
                         controller: _controller,
+                        physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
                         padding: const EdgeInsets.only(bottom: 30, top: 17),
                         itemBuilder: (context, index) {
@@ -257,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                                         Text(
                                           '${sessionData.lessons?.length ?? '0'} lesson${sessionData.lessons?.length == 1 ? '' : 's'}',
                                           style: TextStyle(
-                                            color: const Color(0xFF2B2B2B).withOpacity(0.70),
+                                            color: AppColors.black2.withOpacity(0.70),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                           ),
@@ -290,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                                             Text(
                                               '4.5',
                                               style: TextStyle(
-                                                color: const Color(0xFF2B2B2B).withOpacity(0.7),
+                                                color: AppColors.black2.withOpacity(0.7),
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 10,
                                               ),
@@ -307,13 +310,13 @@ class _HomePageState extends State<HomePage> {
                         },
                         separatorBuilder: (context, index) => const SizedBox(height: 16),
                         itemCount: topSessions.length,
-                      );
-                    }
-                  } else {
-                    return const ListPlaceHolder(placeHolderText: 'No sessions available');
+                      ),
+                    );
                   }
-                },
-              ),
+                } else {
+                  return const SliverFillRemaining(child: ListPlaceHolder(placeHolderText: 'No sessions available'));
+                }
+              },
             )
           ],
         ),

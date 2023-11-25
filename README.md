@@ -15,3 +15,4 @@ Package name: anuradha
 ### Features
 - Home page can be refreshed using RefreshIndicator
 - Proper error handling with widgets for displaying errors
+- Enter full screen on double tab on vertical drag in video player

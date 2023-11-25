@@ -73,12 +73,16 @@ class _LessonPlayerState extends State<LessonPlayer> with RouteAware {
             child: const CircularLoader(),
           );
         } else if (state is SuccessState) {
-          return SizedBox(
-            width: widget.width,
-            height: widget.height,
-            child: _isVideoControllerInitialized
-                ? Chewie(controller: _lessonPlayerConfigCubit.chewieController!)
-                : const CircularLoader(),
+          return GestureDetector(
+            onDoubleTap: () => _enterFullScreen(),
+            onVerticalDragEnd: (dragDetails) => _enterFullScreen(),
+            child: SizedBox(
+              width: widget.width,
+              height: widget.height,
+              child: _isVideoControllerInitialized
+                  ? Chewie(controller: _lessonPlayerConfigCubit.chewieController!)
+                  : const CircularLoader(),
+            ),
           );
         } else if (state is ErrorState) {
           return Padding(
@@ -90,5 +94,11 @@ class _LessonPlayerState extends State<LessonPlayer> with RouteAware {
         return const SizedBox.shrink();
       },
     );
+  }
+
+  void _enterFullScreen() {
+    if (_isVideoControllerInitialized) {
+      _lessonPlayerConfigCubit.chewieController!.enterFullScreen();
+    }
   }
 }
