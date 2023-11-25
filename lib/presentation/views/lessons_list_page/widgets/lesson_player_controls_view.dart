@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../domain/enums/data_error_enum.dart';
 import '../../../../utils/constants/app_colors.dart';
@@ -40,7 +41,6 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
         bloc: _lessonPlayerConfigCubit,
         builder: (context, state) {
           return CustomScrollView(
-            // key: _controllersScrollGlobalKey,
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
@@ -71,7 +71,7 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                           children: [
                                             Text(
                                               videoController.position.inMinutesAndSeconds,
-                                              style: const TextStyle(
+                                              style: GoogleFonts.lora(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
                                                 color: Colors.black,
@@ -102,7 +102,7 @@ class _LessonPlayerControlsViewState extends State<LessonPlayerControlsView> {
                                             ),
                                             Text(
                                               videoController.duration.inMinutesAndSeconds,
-                                              style: const TextStyle(
+                                              style: GoogleFonts.lora(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
                                                 color: Colors.black,
