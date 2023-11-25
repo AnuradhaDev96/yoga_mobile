@@ -13,6 +13,7 @@ import '../../states/authentication_state.dart';
 import '../../widgets/circular_loader.dart';
 import '../../widgets/list_placeholder.dart';
 import '../lessons_list_page/lessons_list_page.dart';
+import '../sessions_list_by_category_page/sessions_list_by_category_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -69,28 +70,37 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     var category = SessionCategoryEnum.values[index];
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 88,
-                          height: 88,
-                          margin: const EdgeInsets.only(bottom: 13),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              image: DecorationImage(
-                                image: AssetImage(category.source),
-                              )),
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SessionsListByCategoryPage(category: category),
                         ),
-                        Text(
-                          category.text,
-                          style: const TextStyle(
-                            color: AppColors.black1,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 88,
+                            height: 88,
+                            margin: const EdgeInsets.only(bottom: 13),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                image: DecorationImage(
+                                  image: AssetImage(category.source),
+                                )),
                           ),
-                        )
-                      ],
+                          Text(
+                            category.text,
+                            style: const TextStyle(
+                              color: AppColors.black1,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          )
+                        ],
+                      ),
                     );
                   },
                   separatorBuilder: (context, index) => const SizedBox(width: 16),
@@ -161,7 +171,6 @@ class _HomePageState extends State<HomePage> {
             FutureBuilder(
               future: GetIt.instance<YogaActivitiesRepository>().getSessions(),
               builder: (context, snapshot) {
-
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SliverFillRemaining(child: CircularLoader());
                 }
@@ -175,8 +184,8 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else {
                     List<SessionModel> topSessions = [];
-                    if (listData.length >= 3) {
-                      topSessions.addAll(listData.sublist(0, 3));
+                    if (listData.length >= 5) {
+                      topSessions.addAll(listData.sublist(0, 5));
                     } else {
                       topSessions.addAll(listData);
                     }

@@ -17,3 +17,11 @@ Package name: anuradha
 - Proper error handling with widgets for displaying errors
 - Enter full screen on double tab or vertical drag in video player
 - Read more/less feature in lesson player page. When user clicks on the description of lesson, they can toggle the appearance.
+
+- Home page session list has top sessions (only 5 top sessions)
+- Created page to view lesson by category
+- Categories are
+  - Full Body
+  - Upper Body
+  - Lower Body
+  - Hips
